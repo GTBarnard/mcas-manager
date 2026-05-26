@@ -1,0 +1,1664 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="MCAS Manager">
+<title>MCAS Manager</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{height:100%}
+body{background:#f7f4ef;color:#2a2520;font-family:'DM Sans',sans-serif;display:flex;flex-direction:column;height:100vh;overflow:hidden;max-width:430px;margin:0 auto}
+input,textarea,select{background:#fff;color:#2a2520;border:1.5px solid #e8e0d4;border-radius:12px;padding:10px 13px;font-family:'DM Sans',sans-serif;font-size:15px;outline:none;width:100%}
+input:focus,textarea:focus,select:focus{border-color:#2d8c7a}
+button{cursor:pointer;font-family:'DM Sans',sans-serif;border:none;outline:none}
+textarea{resize:vertical;min-height:65px;line-height:1.5}
+#topbar{background:#fff;border-bottom:1px solid #e8e0d4;padding:10px 16px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+#content{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:16px;padding-bottom:90px}
+#bottomnav{background:#fff;border-top:1px solid #e8e0d4;flex-shrink:0;position:relative;z-index:10}
+.nr{display:flex}
+.nr+.nr{border-top:1px solid #e8e0d4}
+.nb{flex:1;background:none;border:none;border-top:2px solid transparent;padding:7px 2px 5px;display:flex;flex-direction:column;align-items:center;gap:1px;cursor:pointer}
+.nb.on{border-top-color:#2d8c7a}
+.nb .ni{font-size:16px}.nb.on .ni{font-size:18px}
+.nb .nl{font-size:9px;font-weight:600;color:#9d9088;text-align:center;line-height:1.2}.nb.on .nl{color:#2d8c7a}
+.card{background:#fff;border-radius:16px;box-shadow:0 2px 12px rgba(0,0,0,.08);border:1px solid #e8e0d4;padding:16px;margin-bottom:12px}
+.pill{display:inline-block;border-radius:20px;padding:3px 9px;font-size:11px;font-weight:600;white-space:nowrap}
+.stabs{display:flex;background:#fdf9f4;border-radius:12px;padding:4px;margin-bottom:14px;border:1px solid #e8e0d4}
+.stab{flex:1;background:transparent;border:none;border-radius:9px;padding:8px 4px;font-size:12px;font-weight:700;color:#9d9088;cursor:pointer}
+.stab.on{background:#fff;box-shadow:0 2px 8px rgba(0,0,0,.08)}
+.btn{border-radius:12px;padding:10px 18px;font-size:14px;font-weight:600;cursor:pointer;border:2px solid;width:100%}
+.bt{background:#2d8c7a;color:#fff;border-color:#2d8c7a}
+.br{background:#c94040;color:#fff;border-color:#c94040}
+.bb{background:#3a6fa8;color:#fff;border-color:#3a6fa8}
+.bg{background:#3a8c4a;color:#fff;border-color:#3a8c4a}
+.bsm{padding:7px 13px;font-size:12px;width:auto}
+.fl{font-size:12px;color:#9d9088;display:block;margin-bottom:5px;font-weight:600}
+.fg{margin-bottom:9px}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.hero{background:linear-gradient(135deg,#2d8c7a,#4aab97);border-radius:20px;padding:18px;margin-bottom:14px;color:#fff}
+.hsg{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:10px}
+.hs{background:rgba(255,255,255,.2);border-radius:10px;padding:8px 4px;text-align:center}
+.hsn{font-size:18px;font-weight:700}.hsl{font-size:9px;opacity:.85;margin-top:1px}
+.qg{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:7px;margin-bottom:14px}
+.qb{background:#fff;border:1.5px solid #e8e0d4;border-radius:12px;padding:10px 4px;display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer}
+.qi{font-size:20px}.ql{font-size:9px;font-weight:600;color:#6b6158;text-align:center;line-height:1.2}
+.ci{display:flex;align-items:flex-start;gap:11px;background:#fff;border-radius:13px;padding:11px;margin-bottom:7px;cursor:pointer;border:1.5px solid #e8e0d4}
+.ci.dn{background:#e8f5f2;border-color:rgba(45,140,122,.35)}
+.ci.ng{border-color:rgba(212,137,10,.4)}
+.cb{width:23px;height:23px;border-radius:7px;border:2px solid #e8e0d4;background:transparent;flex-shrink:0;display:flex;align-items:center;justify-content:center;margin-top:1px}
+.ci.dn .cb{background:#2d8c7a;border-color:#2d8c7a}
+.rat{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:8px}
+.rb{width:27px;height:27px;border-radius:7px;border:2px solid #e8e0d4;background:#fff;color:#9d9088;font-size:10px;font-weight:700;cursor:pointer}
+.rb.at{background:#d4890a;border-color:#d4890a;color:#fff}
+.rb.tl{background:#2d8c7a;border-color:#2d8c7a;color:#fff}
+.rb.bl{background:#3a6fa8;border-color:#3a6fa8;color:#fff}
+.rb.pl{background:#7c5cbf;border-color:#7c5cbf;color:#fff}
+.rb.gl{background:#3a8c4a;border-color:#3a8c4a;color:#fff}
+.rb.rl{background:#c94040;border-color:#c94040;color:#fff}
+.sc{border-radius:18px;padding:5px 9px;font-size:11px;cursor:pointer;border:1.5px solid #e8e0d4;background:transparent;color:#9d9088;margin-bottom:4px}
+.sc.st{background:rgba(45,140,122,.15);color:#2d8c7a;border-color:#2d8c7a;font-weight:600}
+.sc.sa{background:rgba(212,137,10,.15);color:#d4890a;border-color:#d4890a;font-weight:600}
+.ds{display:flex;gap:7px;overflow-x:auto;padding-bottom:4px;margin-bottom:10px;scrollbar-width:none}
+.ds::-webkit-scrollbar{display:none}
+.db{background:#fff;color:#6b6158;border:1.5px solid #e8e0d4;border-radius:11px;padding:6px 12px;font-size:11px;font-weight:600;white-space:nowrap;flex-shrink:0;cursor:pointer}
+.db.on{background:#2d8c7a;color:#fff;border-color:#2d8c7a}
+.cl{font-size:11px;font-weight:700;color:#2d8c7a;text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px;margin-top:10px}
+.warn{background:#fef3e0;border:1px solid #fac775;border-radius:14px;padding:10px 13px;margin-bottom:10px}
+.wt{font-size:12px;font-weight:700;color:#854f0b;margin-bottom:3px}
+.wb{font-size:12px;color:#6b6158;line-height:1.5}
+.alrt{background:#fdeaea;border:1px solid rgba(201,64,64,.3);border-radius:14px;padding:12px;margin-bottom:10px}
+.at2{font-size:13px;font-weight:700;color:#c94040;margin-bottom:4px}
+.ab{font-size:12px;color:#2a2520;line-height:1.6}
+.info{background:#e8f5f2;border:1px solid rgba(45,140,122,.3);border-radius:14px;padding:10px 13px;margin-bottom:8px}
+.it{font-size:12px;font-weight:700;color:#0f6e56;margin-bottom:3px}
+.ib{font-size:12px;color:#6b6158;line-height:1.5}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:100;display:flex;align-items:flex-end;justify-content:center}
+.mbox{background:#fff;border-radius:18px 18px 0 0;padding:20px 16px;width:100%;max-width:430px;max-height:80vh;overflow-y:auto}
+.supp-card{border-radius:13px;padding:12px;margin-bottom:8px}
+.avoid-row{display:flex;align-items:flex-start;gap:8px;background:#fdeaea;border-radius:10px;padding:9px 11px;margin-bottom:5px;border:1px solid rgba(201,64,64,.2)}
+.safe-row{display:flex;align-items:flex-start;gap:8px;background:#e8f5f2;border-radius:10px;padding:9px 11px;margin-bottom:5px;border:1px solid rgba(45,140,122,.2)}
+.del{background:none;border:none;color:#9d9088;font-size:17px;cursor:pointer;flex-shrink:0;line-height:1;padding:0}
+.ring{position:relative;width:54px;height:54px;flex-shrink:0}
+.ri{position:absolute;inset:7px;border-radius:50%;background:#e8f5f2;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#2d8c7a}
+.prog{display:flex;align-items:center;gap:13px;background:#e8f5f2;border:1px solid rgba(45,140,122,.3);border-radius:14px;padding:12px;margin-bottom:10px}
+</style>
+</head>
+<body>
+<div id="topbar">
+  <div>
+    <div style="font-size:17px;font-weight:600;color:#2d8c7a">MCAS Manager</div>
+    <div style="font-size:10px;color:#9d9088;margin-top:1px">Your health companion</div>
+  </div>
+  <div style="display:flex;align-items:center;gap:7px">
+    <button onclick="showBackupScreen()" style="background:#e8f5f2;border:1px solid rgba(45,140,122,.3);border-radius:9px;padding:5px 9px;font-size:10px;font-weight:700;color:#2d8c7a;cursor:pointer">Backup</button>
+    <div style="background:#fdeaea;border-radius:9px;padding:4px 9px;border:1px solid rgba(201,64,64,.25)">
+      <div style="font-size:9px;font-weight:700;color:#c94040;text-align:center;line-height:1.4">CARRY<br>EPIPEN</div>
+    </div>
+  </div>
+</div>
+<div id="content"></div>
+<div id="bottomnav">
+  <div class="nr" id="nr1"></div>
+  <div class="nr" id="nr2"></div>
+</div>
+<script>
+var LS = {
+  get: function(k, d) {
+    try { var v = localStorage.getItem('mcas_' + k); return v ? JSON.parse(v) : d; } catch(e) { return d; }
+  },
+  set: function(k, v) {
+    try { localStorage.setItem('mcas_' + k, JSON.stringify(v)); } catch(e) {}
+  }
+};
+
+var SYMS = ["No reaction","Chills","Hot flash","Stomach swelling","Stomach pain","Nausea","Brain fog","Dizziness","Faint feeling","Shortness of breath","Chest tightness","Hives/rash","Sneezing","Coughing","Ear ache","Sore throat","Headache","Heart racing","Low blood pressure","Fatigue","Joint pain","Tooth sensitivity","Itching","Runny nose","Watery eyes","Anxiety spike","Nasal polyp pressure"];
+var WTYPES = ["Walking","Yoga","Swimming","Light stretching","Cycling","Strength training","Pilates","Other"];
+var TTYPES = ["Serum Tryptase","DAO Enzyme Level","Urine Mast Cell Mediators","N-Methylhistamine urine","Blood test","Allergy skin test","Allergy blood test IgE","TPSAB1 genotyping HaT","KIT gene mutation","CT Scan","MRI","X-Ray","Lung function","Viome Gut Kit","Other"];
+
+function initData() {
+  if (!LS.get('cl', null)) LS.set('cl', [
+    {id:1,cat:'Morning',item:'Take H1 antihistamine (cetirizine)',time:'Morning',nag:true,done:false,streak:0},
+    {id:2,cat:'Morning',item:'Take H2 blocker (famotidine)',time:'Morning',nag:true,done:false,streak:0},
+    {id:3,cat:'Morning',item:'Take DAO enzyme supplement',time:'Morning',nag:true,done:false,streak:0},
+    {id:4,cat:'Morning',item:'Check EpiPen is in bag',time:'Morning',nag:true,done:false,streak:0},
+    {id:5,cat:'Morning',item:'Drink first glass of water',time:'Morning',nag:false,done:false,streak:0},
+    {id:6,cat:'Meals',item:'DAO enzyme 15 min before lunch',time:'Lunch',nag:true,done:false,streak:0},
+    {id:7,cat:'Meals',item:'Log lunch in app',time:'Lunch',nag:false,done:false,streak:0},
+    {id:8,cat:'Meals',item:'DAO enzyme 15 min before dinner',time:'Dinner',nag:true,done:false,streak:0},
+    {id:9,cat:'Evening',item:'Evening antihistamine dose',time:'Evening',nag:true,done:false,streak:0},
+    {id:10,cat:'Evening',item:'Run HEPA air purifier in bedroom',time:'Evening',nag:true,done:false,streak:0},
+    {id:11,cat:'Evening',item:'No leftover protein at dinner',time:'Evening',nag:true,done:false,streak:0},
+    {id:12,cat:'Weekly',item:'Wash bedding fragrance-free hot water',time:'Weekly',nag:false,done:false,streak:0},
+    {id:13,cat:'Weekly',item:'Review weekly summary for doctor',time:'Weekly',nag:false,done:false,streak:0}
+  ]);
+  if (!LS.get('avoid', null)) LS.set('avoid', [
+    {id:1,cat:'Seafood',item:'All shellfish',reason:'Anaphylaxis'},
+    {id:2,cat:'Seafood',item:'All sea fish',reason:'Anaphylaxis'},
+    {id:3,cat:'Nuts',item:'Brazilian nuts',reason:'Anaphylaxis'},
+    {id:4,cat:'High Histamine',item:'Aged cheeses and fermented foods',reason:'High histamine'},
+    {id:5,cat:'High Histamine',item:'Red wine, beer, champagne',reason:'High histamine and DAO blocker'},
+    {id:6,cat:'High Histamine',item:'Cured and processed meats',reason:'High histamine'},
+    {id:7,cat:'Histamine Liberators',item:'Strawberries, tomatoes, citrus',reason:'Trigger histamine release'},
+    {id:8,cat:'Histamine Liberators',item:'Chocolate, spinach, eggplant, avocado',reason:'Histamine liberators'},
+    {id:9,cat:'Additives',item:'All artificial food dyes',reason:'Known trigger'},
+    {id:10,cat:'Additives',item:'Sulfites, benzoates, BHA, BHT, MSG',reason:'Mast cell triggers'},
+    {id:11,cat:'Environmental',item:'Perfumes and fragrances',reason:'Airborne trigger'},
+    {id:12,cat:'Environmental',item:'Formaldehyde in furniture and fabrics',reason:'Anaphylaxis trigger'},
+    {id:13,cat:'Environmental',item:'Mold and black mold',reason:'Major onset trigger'},
+    {id:14,cat:'Environmental',item:'Bee stings and insect bites',reason:'Lifelong anaphylaxis trigger'},
+    {id:15,cat:'Environmental',item:'Latex',reason:'Cross-reactive with MCAS'}
+  ]);
+  if (!LS.get('safe', null)) LS.set('safe', [
+    {id:1,cat:'Proteins',item:'Fresh chicken eat immediately or freeze',notes:'No leftovers'},
+    {id:2,cat:'Proteins',item:'Fresh turkey same day cook',notes:'Freeze right away'},
+    {id:3,cat:'Proteins',item:'Fresh lamb',notes:'Well tolerated'},
+    {id:4,cat:'Proteins',item:'Pasture eggs',notes:'Test one at a time'},
+    {id:5,cat:'Grains',item:'White rice, pure oats, quinoa',notes:'Plain no additives'},
+    {id:6,cat:'Vegetables',item:'Broccoli, zucchini, carrots, green beans',notes:'Anti-inflammatory'},
+    {id:7,cat:'Vegetables',item:'Sweet potato, white potato, butternut squash',notes:'Very well tolerated'},
+    {id:8,cat:'Fruits',item:'Blueberries, apples peeled, pears peeled',notes:'Low histamine'},
+    {id:9,cat:'Fats',item:'Olive oil, coconut oil, ghee',notes:'Anti-inflammatory'},
+    {id:10,cat:'Herbs',item:'Fresh garlic, ginger, parsley, turmeric',notes:'Mast cell stabilizers'}
+  ]);
+  if (!LS.get('meds', null)) LS.set('meds', [
+    {id:1,sev:'Critical',item:'Always carry EpiPen',reaction:'Required at all times'},
+    {id:2,sev:'High Risk',item:'NSAIDs: ibuprofen, Advil, Motrin, naproxen, Aleve',reaction:'Direct mast cell trigger'},
+    {id:3,sev:'High Risk',item:'Aspirin and ASA',reaction:'Mast cell trigger'},
+    {id:4,sev:'High Risk',item:'Morphine and codeine',reaction:'Request fentanyl or hydromorphone instead'},
+    {id:5,sev:'High Risk',item:'Contrast dyes for CT and MRI',reaction:'Alert radiology and pre-medicate first'},
+    {id:6,sev:'High Risk',item:'Certain vaccines',reaction:'Breathing difficulties, pre-medicate, EpiPen ready'},
+    {id:7,sev:'Medium Risk',item:'Certain antibiotics log specific names',reaction:'Track which ones cause reactions'},
+    {id:8,sev:'Protocol',item:'DENTAL: teeth very sensitive very difficult to numb',reaction:'Higher doses or alternative agents required'},
+    {id:9,sev:'Protocol',item:'Pre-procedure: H1 and H2 antihistamine plus corticosteroid',reaction:'Required before any procedure'}
+  ]);
+  if (!LS.get('supps', null)) LS.set('supps', [
+    {id:1,name:'Quercetin phytosome',dose:'500mg',freq:'Twice daily with meals',status:'Taking',notes:'Natural mast cell stabilizer',viome:false},
+    {id:2,name:'DAO Enzyme',dose:'1 capsule',freq:'15 min before each meal',status:'Taking',notes:'Breaks down food histamine',viome:false},
+    {id:3,name:'Buffered Vitamin C',dose:'500mg',freq:'Once daily',status:'Taking',notes:'Supports DAO production not citrus-based',viome:false},
+    {id:4,name:'Vitamin D3',dose:'',freq:'',status:'Not started',notes:'Test blood levels first. Take with fat-containing meal.',viome:false},
+    {id:5,name:'Magnesium Glycinate',dose:'200mg',freq:'At bedtime',status:'Not started',notes:'Supports sleep and mast cell regulation',viome:false},
+    {id:6,name:'Vitamin B6',dose:'',freq:'',status:'Not started',notes:'WARNING: Never exceed 100mg per day. Nerve damage risk. Check Viome first.',viome:true},
+    {id:7,name:'Omega-3 EPA/DHA',dose:'1000mg',freq:'Daily with food',status:'Not started',notes:'Must be molecularly distilled. Rancid fish oil triggers histamine.',viome:false},
+    {id:8,name:'Luteolin',dose:'100-300mg',freq:'Daily',status:'Not started',notes:'More potent than cromolyn for mast cell degranulation',viome:false}
+  ]);
+  if (!LS.get('env', null)) LS.set('env', [
+    {id:1,cat:'Bedroom',item:'100% organic cotton duvet and pillows',done:true,note:'Already doing, continue on travel'},
+    {id:2,cat:'Bedroom',item:'Mattress encasement mold and dust mite barrier',done:false,note:''},
+    {id:3,cat:'Bedroom',item:'HEPA air purifier running 24/7',done:false,note:'Austin Air, IQAir, Alen, no ozone models'},
+    {id:4,cat:'Air Quality',item:'MERV-13 HVAC filters replace every 60 days',done:false,note:''},
+    {id:5,cat:'Air Quality',item:'Annual professional mold inspection',done:false,note:'After any water leak too'},
+    {id:6,cat:'Personal Care',item:'Fragrance-free shampoo and conditioner',done:false,note:'Vanicream, Free and Clear'},
+    {id:7,cat:'Laundry',item:'Fragrance-free detergent no fabric softener',done:false,note:'Seventh Generation Free and Clear'},
+    {id:8,cat:'Travel',item:'Carry cotton pillow and duvet on trips',done:true,note:'Already doing'},
+    {id:9,cat:'Travel',item:'EpiPen and antihistamines in carry-on always',done:false,note:''}
+  ]);
+  if (!LS.get('myproducts', null)) LS.set('myproducts', [
+    {id:1,cat:'Hair Care',name:'Vanicream Hair Shampoo 12oz',brand:'Vanicream',where:'Amazon',price:'$12',status:'Ordered',tried:false,rating:0,reaction:'',notes:'',reorderWeeks:8,reorderAlert:false,orderedDate:''},
+    {id:2,cat:'Hair Care',name:'Vanicream Conditioner pH Balanced 12oz',brand:'Vanicream',where:'Amazon',price:'$10',status:'Ordered',tried:false,rating:0,reaction:'',notes:'',reorderWeeks:8,reorderAlert:false,orderedDate:''},
+    {id:3,cat:'Toothpaste',name:'Primal Life Organics Dirty Mouth Toothpowder Spearmint',brand:'Primal Life Organics',where:'Amazon',price:'$25',status:'Ordered',tried:false,rating:0,reaction:'',notes:'',reorderWeeks:12,reorderAlert:false,orderedDate:''},
+    {id:4,cat:'Soap',name:'Dove Beauty Bar Sensitive Unscented Fragrance Free',brand:'Dove',where:'Amazon',price:'$12',status:'Have it',tried:false,rating:0,reaction:'',notes:'Current soap keeping this',reorderWeeks:8,reorderAlert:false,orderedDate:''},
+    {id:5,cat:'Sunscreen',name:'Blue Lizard Sensitive Mineral SPF 50 Spray',brand:'Blue Lizard',where:'Amazon',price:'$14',status:'Ordered',tried:false,rating:0,reaction:'',notes:'Non-nano zinc oxide only',reorderWeeks:10,reorderAlert:false,orderedDate:''},
+    {id:6,cat:'Eye Makeup Remover',name:'Bioderma Sensibio H2O Micellar Water 8.4oz',brand:'Bioderma',where:'Amazon',price:'$14',status:'Ordered',tried:false,rating:0,reaction:'',notes:'Fragrance free and alcohol free',reorderWeeks:10,reorderAlert:false,orderedDate:''},
+    {id:7,cat:'Deodorant',name:'Stick Up Natural Deodorant Bentonite Clay White Coconut',brand:'Stick Up',where:'Amazon',price:'$16',status:'Ordered',tried:false,rating:0,reaction:'',notes:'No aluminum, vegan',reorderWeeks:12,reorderAlert:false,orderedDate:''},
+    {id:8,cat:'Face Moisturizer',name:'Vanicream Daily Facial Moisturizer with Ceramides 3oz',brand:'Vanicream',where:'Amazon',price:'$13',status:'Ordered',tried:false,rating:0,reaction:'',notes:'Fragrance free dye free paraben free',reorderWeeks:10,reorderAlert:false,orderedDate:''},
+    {id:9,cat:'Body Moisturizer',name:'Vanicream Moisturizing Lotion 16oz Fragrance Free',brand:'Vanicream',where:'Amazon',price:'$14',status:'Ordered',tried:false,rating:0,reaction:'',notes:'Fragrance free and gluten free',reorderWeeks:10,reorderAlert:false,orderedDate:''},
+    {id:10,cat:'Firming Body Lotion',name:'Necessaire The Body Serum Fragrance-Free Hyaluronic Acid',brand:'Necessaire',where:'Amazon',price:'$52',status:'Ordered',tried:false,rating:0,reaction:'',notes:'Niacinamide and ceramides included',reorderWeeks:12,reorderAlert:false,orderedDate:''},
+    {id:11,cat:'Light Therapy',name:'CurrentBody Skin LED Face and Neck Kit Series 2',brand:'CurrentBody',where:'CurrentBody.com',price:'$799',status:'Ordered',tried:false,rating:0,reaction:'',notes:'Red light and near-infrared. Start at 2 min and build up slowly for MCAS.',reorderWeeks:0,reorderAlert:false,orderedDate:''},
+    {id:12,cat:'Anti-Aging Serums',name:'Herbivore Bakuchiol Retinol Alternative Serum - Morning',brand:'Herbivore',where:'Amazon, Sephora, Target',price:'$54',status:'To Order',tried:false,rating:0,reaction:'',notes:'Morning serum Step 2. Fragrance-free bakuchiol plus hyaluronic acid.',reorderWeeks:12,reorderAlert:false,orderedDate:''},
+    {id:13,cat:'Anti-Aging Serums',name:'The Ordinary Argireline Solution 10% - Morning Firming',brand:'The Ordinary',where:'Amazon, Sephora, theordinary.com',price:'$18',status:'To Order',tried:false,rating:0,reaction:'',notes:'Morning serum Step 3. Only 3 ingredients. Firming peptide for expression lines.',reorderWeeks:16,reorderAlert:false,orderedDate:''},
+    {id:14,cat:'Anti-Aging Serums',name:'The Ordinary Buffet + Copper Peptides 1% - Night Serum',brand:'The Ordinary',where:'Amazon, Sephora, theordinary.com',price:'$28',status:'To Order',tried:false,rating:0,reaction:'',notes:'Evening serum Step 2. Collagen support. Do not mix with Vitamin C on same night.',reorderWeeks:16,reorderAlert:false,orderedDate:''},
+    {id:15,cat:'Anti-Aging Serums',name:'Bakuchiol Botanicals Cream - Night Treatment',brand:'Bakuchiol Botanicals',where:'Amazon',price:'$35',status:'To Order',tried:false,rating:0,reaction:'',notes:'Evening Step 3. Start 3 nights per week for first 2 weeks then build up.',reorderWeeks:12,reorderAlert:false,orderedDate:''},
+    {id:16,cat:'Anti-Aging Serums',name:'Trilogy Certified Organic Rosehip Oil - Night Finishing',brand:'Trilogy',where:'Amazon, Whole Foods',price:'$20',status:'To Order',tried:false,rating:0,reaction:'',notes:'Evening Step 5 - ALWAYS last. Seals everything in. Natural vitamin A.',reorderWeeks:12,reorderAlert:false,orderedDate:''},
+    {id:17,cat:'Anti-Aging Serums',name:'Annmarie Organic Anti-Aging Eye Cream',brand:'Annmarie',where:'annmariegianni.com',price:'$49',status:'To Order',tried:false,rating:0,reaction:'',notes:'Evening Step 4 eye area only. Use ring finger only. MADE SAFE certified.',reorderWeeks:16,reorderAlert:false,orderedDate:''},
+    {id:18,cat:'Anti-Aging Serums',name:'Blue Lizard Sensitive Mineral SPF 50+ Morning Protection',brand:'Blue Lizard',where:'Amazon, CVS, Walgreens, Target',price:'$15-20',status:'To Order',tried:false,rating:0,reaction:'',notes:'Morning Step 5 - ALWAYS absolute last step. Non-nano zinc oxide only.',reorderWeeks:10,reorderAlert:false,orderedDate:''}
+  ]);
+
+  if (!LS.get('supplyproducts', null)) LS.set('supplyproducts', [
+    {id:101,cat:'Mast Cell Stabilizers',name:'Quercetin HistaminX Phytosome',brand:'Seeking Health',where:'seekinghealth.com, Amazon, iHerb',price:'~$30',notes:'500-1000mg daily, 30 min before meals. Must be phytosome or liposomal form - standard quercetin only 1% absorbed.',status:'To Order',tried:false,rating:0,reaction:'',feedback:'',reorderWeeks:8,reorderAlert:false,orderedDate:''},
+    {id:102,cat:'Mast Cell Stabilizers',name:'Luteolin Hista-Aid Liposomal',brand:'Quicksilver Scientific',where:'quicksilverscientific.com, Amazon',price:'~$45',notes:'100-300mg daily. More potent than cromolyn for mast cell degranulation. Combines quercetin and luteolin.',status:'To Order',tried:false,rating:0,reaction:'',feedback:'',reorderWeeks:8,reorderAlert:false,orderedDate:''},
+    {id:103,cat:'Mast Cell Stabilizers',name:'Curcumin Phytosome',brand:'Thorne',where:'thorne.com, Amazon, iHerb',price:'~$35',notes:'500-1000mg daily with food. Must be phytosome form for absorption.',status:'To Order',tried:false,rating:0,reaction:'',feedback:'',reorderWeeks:8,reorderAlert:false,orderedDate:''},
+    {id:104,cat:'DAO Histamine Support',name:'Umbrellux DAO Enzyme',brand:'Umbrellux',where:'Amazon, intoleran.com',price:'~$40',notes:'1-2 capsules 15-20 min before EACH meal. Timing is critical - take BEFORE meals not after. Most important supplement for MCAS.',status:'To Order',tried:false,rating:0,reaction:'',feedback:'',reorderWeeks:6,reorderAlert:false,orderedDate:''},
+    {id:105,cat:'DAO Histamine Support',name:'Vitamin B6 as P5P Pyridoxal-5-Phosphate',brand:'Thorne',where:'thorne.com, Amazon',price:'~$20',notes:'25-50mg daily with food. MUST be P5P form not standard B6. WARNING: Never exceed 100mg per day - nerve damage risk. Check Viome kit first.',status:'To Order',tried:false,rating:0,reaction:'',feedback:'',reorderWeeks:12,reorderAlert:false,orderedDate:''},
+    {id:106,cat:'DAO Histamine Support',name:'Copper Bisglycinate',brand:'Thorne',where:'thorne.com, Amazon',price:'~$15',notes:'1-2mg daily with food. Very low dose - do not exceed. Must stay balanced with zinc. Use only under doctor guidance.',status:'To Order',tried:false,rating:0,reaction:'',feedback:'',reorderWeeks:16,reorderAlert:false,orderedDate:''},
+    {id:107,cat:'Essential Vitamins',name:'Vitamin D3 with K2',brand:'Thorne',where:'thorne.com, Amazon',price:'~$25',notes:'2000-5000 IU daily. Test blood levels first with doctor. Take with fatty meal for absorption. Deficiency alone can activate mast cells.',status:'To Order',tried:false,rating:0,reaction:'',feedback:'',reorderWeeks:12,reorderAlert:false,orderedDate:''},
+    {id:108,cat:'Essential Vitamins',name:'Vitamin C Magnesium Ascorbate Buffered',brand:'Pure Encapsulations',where:'Amazon, iHerb',price:'~$25',notes:'500-1000mg 2-3 times daily spread throughout day. AVOID ascorbyl palmitate - higher histamine. Not citrus-based.',status:'To Order',tried:false,rating:0,reaction:'',feedback:'',reorderWeeks:8,reorderAlert:false,orderedDate:''},
+    {id:109,cat:'Essential Vitamins',name:'Magnesium Glycinate',brand:'Pure Encapsulations',where:'pureencapsulations.com, Amazon',price:'~$30',notes:'200-400mg in the evening. Glycinate form gentlest on sensitive digestive systems. Avoid magnesium oxide.',status:'To Order',tried:false,rating:0,reaction:'',feedback:'',reorderWeeks:8,reorderAlert:false,orderedDate:''},
+    {id:110,cat:'Essential Vitamins',name:'Vitamin B12 Methylcobalamin',brand:'Jarrow',where:'Amazon, iHerb',price:'~$15',notes:'500-1000mcg in the morning. MUST be methylcobalamin form. Do NOT use cyanocobalamin.',status:'To Order',tried:false,rating:0,reaction:'',feedback:'',reorderWeeks:12,reorderAlert:false,orderedDate:''},
+    {id:111,cat:'Omega-3',name:'Nordic Naturals Algae Omega',brand:'Nordic Naturals',where:'nordicnaturals.com, Amazon',price:'~$35',notes:'1000-2000mg EPA/DHA daily with food. Algae oil safest - no marine histamine or biogenic amines. 2025-2026 update: 60% of fish oil products exceed safe oxidation limits.',status:'To Order',tried:false,rating:0,reaction:'',feedback:'',reorderWeeks:8,reorderAlert:false,orderedDate:''},
+    {id:112,cat:'MCAS-Safe Probiotics',name:'Seeking Health ProBiota HistaminX',brand:'Seeking Health',where:'seekinghealth.com, Amazon, iHerb',price:'~$35',notes:'Specifically formulated to avoid ALL histamine-producing strains. Start at lowest dose and increase slowly. AVOID: L. reuteri, L. casei, L. bulgaricus - histamine producers.',status:'To Order',tried:false,rating:0,reaction:'',feedback:'',reorderWeeks:8,reorderAlert:false,orderedDate:''},
+    {id:113,cat:'MCAS-Safe Probiotics',name:'Jarrow Saccharomyces Boulardii',brand:'Jarrow',where:'Amazon, iHerb',price:'~$20',notes:'Gentle, great for gut lining repair. Safe for MCAS.',status:'To Order',tried:false,rating:0,reaction:'',feedback:'',reorderWeeks:8,reorderAlert:false,orderedDate:''},
+    {id:201,cat:'All-Purpose Cleaner',name:'Branch Basics Concentrate Glass Starter Kit',brand:'Branch Basics',where:'branchbasics.com',price:'~$69 kit, ~$49 refill',notes:'MADE SAFE certified. Only 6 ingredients. One concentrate replaces every cleaner. Order Glass Kit for MCAS. Mast Cell 360 confirmed safe March 2026.',status:'To Order',tried:false,rating:0,reaction:'',feedback:'',reorderWeeks:16,reorderAlert:false,orderedDate:''},
+    {id:202,cat:'Stone Floors',name:'Black Diamond Stoneworks Marble and Tile Floor Cleaner',brand:'Black Diamond',where:'Amazon',price:'~$15-20',notes:'pH neutral for natural stone. Safe for travertine, marble, limestone, slate. NEVER use vinegar on stone - etches permanently.',status:'To Order',tried:false,rating:0,reaction:'',feedback:'',reorderWeeks:12,reorderAlert:false,orderedDate:''},
+    {id:203,cat:'Wood Floors',name:'Bona Hardwood Floor Cleaner Free and Simple Unscented',brand:'Bona',where:'Amazon, Target, Home Depot',price:'~$10-14',notes:'MUST choose Free and Simple or Unscented version only. Standard formula has lavender-thyme scent problematic for MCAS. EPA Safer Choice certified.',status:'To Order',tried:false,rating:0,reaction:'',feedback:'',reorderWeeks:12,reorderAlert:false,orderedDate:''},
+    {id:204,cat:'Glass and Windows',name:'Seventh Generation Glass Cleaner Free and Clear',brand:'Seventh Generation',where:'Amazon, Target, Whole Foods',price:'~$4-6',notes:'Fragrance-free, no VOCs, ammonia-free. NEVER use ammonia-based Windex - strong mast cell respiratory trigger.',status:'To Order',tried:false,rating:0,reaction:'',feedback:'',reorderWeeks:12,reorderAlert:false,orderedDate:''},
+    {id:205,cat:'Laundry',name:'All Free and Clear Laundry Detergent',brand:'All',where:'Grocery stores, Amazon',price:'~$10',notes:'Already using this - confirmed safe for MCAS. EPA Safer Choice certified. No optical brighteners, fragrances, or dyes. Keep using.',status:'Have it',tried:false,rating:0,reaction:'',feedback:'',reorderWeeks:6,reorderAlert:false,orderedDate:''},
+    {id:206,cat:'Laundry',name:'Silicone Dryer Balls XL 4-Pack Wool-Free',brand:'Sunseeke',where:'Amazon',price:'~$12-15',notes:'100% silicone - no wool, no fragrance, no chemicals. Safe for wool allergy and MCAS. Replace dryer sheets completely - even unscented sheets off-gas chemicals.',status:'To Order',tried:false,rating:0,reaction:'',feedback:'',reorderWeeks:0,reorderAlert:false,orderedDate:''},
+    {id:207,cat:'Dishes',name:'Seventh Generation Free and Clear Dish Liquid',brand:'Seventh Generation',where:'Amazon, Target, grocery stores',price:'~$5-7',notes:'Fragrance-free, dye-free, EPA Safer Choice certified.',status:'To Order',tried:false,rating:0,reaction:'',feedback:'',reorderWeeks:8,reorderAlert:false,orderedDate:''},
+    {id:208,cat:'Dishes',name:'Seventh Generation Free and Clear Dishwasher Packs',brand:'Seventh Generation',where:'Amazon, Target, grocery stores',price:'~$12-15',notes:'Fragrance-free, no synthetic dyes, enzyme-based. Use white vinegar diluted 50/50 in glass container on top rack instead of rinse aid.',status:'To Order',tried:false,rating:0,reaction:'',feedback:'',reorderWeeks:8,reorderAlert:false,orderedDate:''},
+    {id:209,cat:'Disinfecting',name:'Hydrogen Peroxide 3% Plain Unscented',brand:'Any drugstore brand',where:'Any drugstore or grocery store',price:'~$1-2',notes:'Spray on surface, leave 1 minute, wipe clean. Store in original dark bottle. Use INSTEAD of bleach or Lysol - both are major MCAS triggers.',status:'To Order',tried:false,rating:0,reaction:'',feedback:'',reorderWeeks:8,reorderAlert:false,orderedDate:''},
+    {id:210,cat:'Bathroom',name:'Branch Basics Oxygen Boost Powder',brand:'Branch Basics',where:'branchbasics.com',price:'~$18',notes:'For stubborn soap scum or grout: spray Branch Basics, sprinkle Oxygen Boost, let sit 10 min, scrub. No fragrance, no harsh chemicals.',status:'To Order',tried:false,rating:0,reaction:'',feedback:'',reorderWeeks:16,reorderAlert:false,orderedDate:''},
+    {id:211,cat:'Wood Care',name:'Real Milk Paint Pure Tung Oil',brand:'Real Milk Paint Co',where:'realmilkpaint.com, Amazon',price:'~$20-30',notes:'For redwood table and wood floors. 100% zero VOC, food-safe once cured. Full cure 7 days. Ventilate well during application. Once cured completely odorless.',status:'To Order',tried:false,rating:0,reaction:'',feedback:'',reorderWeeks:0,reorderAlert:false,orderedDate:''}
+  ]);
+  if (!LS.get('meals', null)) LS.set('meals', [
+    {day:'Monday',B:'Oat porridge, coconut milk, blueberries, apple.',L:'Fresh baked chicken, white rice, broccoli, olive oil.',D:'Roasted chicken thighs, sweet potato mash, green beans.'},
+    {day:'Tuesday',B:'Scrambled eggs, sauteed zucchini, sliced pear.',L:'Fresh turkey, quinoa, roasted carrots and asparagus.',D:'Baked chicken, baked potato, steamed cabbage with garlic.'},
+    {day:'Wednesday',B:'Oats with coconut milk, fresh mango.',L:'Fresh chicken cook new today, white rice, peas.',D:'Lamb cutlets fresh, sweet potato wedges, asparagus.'},
+    {day:'Thursday',B:'Rice congee with ginger, carrots, ghee.',L:'Fresh turkey patties herbs only, quinoa, zucchini.',D:'Baked chicken, butternut squash soup with coconut milk.'},
+    {day:'Friday',B:'Poached eggs, steamed kale, sliced apple.',L:'Chicken salad: lettuce, carrots, cucumber, peas, olive oil.',D:'Slow-cooked lamb, carrots, sweet potato, white rice.'},
+    {day:'Saturday',B:'Oat pancakes with oats egg coconut milk, blueberries.',L:'Turkey vegetable soup: fresh turkey, carrots, zucchini.',D:'Baked chicken thighs, roasted root vegetables.'},
+    {day:'Sunday',B:'Scrambled eggs with herbs, asparagus, watermelon.',L:'Quinoa bowl: butternut squash, peas, olive oil, ginger.',D:'Roast chicken whole fresh, white rice, steamed broccoli.'}
+  ]);
+}
+initData();
+
+function $(id) { return document.getElementById(id); }
+function today() { return new Date().toISOString().split('T')[0]; }
+function todayStr() { return new Date().toDateString(); }
+function fmtD(d) { try { return new Date(d + 'T12:00').toLocaleDateString('en-US', {month:'short', day:'numeric'}); } catch(e) { return d; } }
+
+function E(tag, p, kids) {
+  p = p || {};
+  kids = kids || [];
+  var e = document.createElement(tag);
+  var k;
+  for (k in p) {
+    var v = p[k];
+    if (k === 'cls') e.className = v;
+    else if (k === 'html') e.innerHTML = v;
+    else if (k === 'style' && typeof v === 'object') {
+      var sk;
+      for (sk in v) e.style[sk] = v[sk];
+    }
+    else if (k.indexOf('on') === 0) e.addEventListener(k.slice(2).toLowerCase(), v);
+    else e[k] = v;
+  }
+  if (!Array.isArray(kids)) kids = [kids];
+  kids.forEach(function(c) {
+    if (c == null) return;
+    e.appendChild(typeof c === 'string' ? document.createTextNode(c) : c);
+  });
+  return e;
+}
+
+function pill(t, col) {
+  var e = E('span', {cls:'pill'});
+  e.textContent = t;
+  e.style.background = col + '20';
+  e.style.color = col;
+  e.style.border = '1px solid ' + col + '44';
+  return e;
+}
+
+function card(bg) {
+  var e = E('div', {cls:'card'});
+  if (bg) e.style.background = bg;
+  return e;
+}
+
+function mkBtn(t, cls, fn) {
+  var b = E('button', {cls:'btn ' + cls});
+  b.textContent = t;
+  b.onclick = fn || function(){};
+  return b;
+}
+
+function fld(lbl, inp) {
+  var w = E('div', {cls:'fg'});
+  if (lbl) w.appendChild(E('label', {cls:'fl'}, [lbl]));
+  w.appendChild(inp);
+  return w;
+}
+
+function stitle(icon, title, sub) {
+  var w = E('div');
+  var r = E('div', {style:{display:'flex',alignItems:'center',gap:'9px',marginBottom:sub?'4px':'18px'}});
+  var ic = E('div', {style:{width:'36px',height:'36px',borderRadius:'11px',background:'rgba(45,140,122,.12)',display:'flex',alignItems:'center',justifyContent:'center',fontSize:'19px',flexShrink:'0'}}, [icon]);
+  r.appendChild(ic);
+  r.appendChild(E('h2', {style:{fontSize:'20px',fontWeight:'600',color:'#2a2520',lineHeight:'1.1'}}, [title]));
+  w.appendChild(r);
+  if (sub) w.appendChild(E('p', {style:{color:'#9d9088',fontSize:'12px',marginLeft:'45px',lineHeight:'1.5',marginBottom:'16px'}}, [sub]));
+  return w;
+}
+
+function rbar(val, onch, col) {
+  var w = E('div', {cls:'rat'});
+  var i;
+  for (i = 1; i <= 10; i++) {
+    (function(n) {
+      var cls = 'rb';
+      if (val >= n) cls += ' ' + col;
+      var b = E('button', {cls:cls}, [String(n)]);
+      b.onclick = function() {
+        onch(n);
+        var btns = w.querySelectorAll('.rb');
+        var j;
+        for (j = 0; j < btns.length; j++) {
+          btns[j].className = 'rb' + (n >= j + 1 ? ' ' + col : '');
+        }
+      };
+      w.appendChild(b);
+    })(i);
+  }
+  return w;
+}
+
+var TABS = [
+  {id:'home',icon:'🏠',label:'Home'},
+  {id:'cl',icon:'☑',label:'Daily'},
+  {id:'log',icon:'📓',label:'Log'},
+  {id:'food',icon:'🥗',label:'Food'},
+  {id:'meds',icon:'💊',label:'Meds'},
+  {id:'supps',icon:'🧪',label:'Supps'},
+  {id:'tests',icon:'🧫',label:'Tests'},
+  {id:'docs',icon:'👨‍⚕️',label:'Doctors'},
+  {id:'weekly',icon:'📊',label:'Weekly'},
+  {id:'mycard',icon:'🪪',label:'My Card'},
+  {id:'env',icon:'✅',label:'Home'},
+  {id:'meals',icon:'📅',label:'Meals'},
+  {id:'products',icon:'🛒',label:'Products'}
+];
+
+var curTab = 'home';
+
+function buildNav() {
+  var n1 = $('nr1');
+  var n2 = $('nr2');
+  if (!n1 || !n2) return;
+  n1.innerHTML = '';
+  n2.innerHTML = '';
+  var i;
+  for (i = 0; i < TABS.length; i++) {
+    (function(t, idx) {
+      var b = E('button', {cls:'nb' + (t.id === curTab ? ' on' : '')});
+      b.innerHTML = '<span class="ni">' + t.icon + '</span><span class="nl">' + t.label + '</span>';
+      b.onclick = function() { go(t.id); };
+      (idx < 6 ? n1 : n2).appendChild(b);
+    })(TABS[i], i);
+  }
+}
+
+function go(id) {
+  curTab = id;
+  buildNav();
+  var c = $('content');
+  if (!c) return;
+  c.innerHTML = '';
+  c.scrollTop = 0;
+  var views = {
+    home:pgHome, cl:pgCL, log:pgLog, food:pgFood,
+    meds:pgMeds, supps:pgSupps, tests:pgTests,
+    docs:pgDocs, weekly:pgWeekly, mycard:pgCard,
+    env:pgEnv, meals:pgMeals, products:pgProducts
+  };
+  if (views[id]) views[id](c);
+}
+
+function pgHome(root) {
+  var lr = LS.get('clReset', '');
+  if (lr !== todayStr()) {
+    LS.set('cl', LS.get('cl', []).map(function(i) {
+      return i.time !== 'Weekly' ? {id:i.id,cat:i.cat,item:i.item,time:i.time,nag:i.nag,done:false,streak:i.streak} : i;
+    }));
+    LS.set('clReset', todayStr());
+  }
+  var logs = LS.get('logs', []);
+  var td = today();
+  var tl = logs.filter(function(l) { return l.date === td; });
+  var cl = LS.get('cl', []);
+  var daily = cl.filter(function(i) { return i.time !== 'Weekly'; });
+  var done = daily.filter(function(i) { return i.done; }).length;
+  var nag = cl.filter(function(i) { return i.nag && !i.done && i.time !== 'Weekly'; });
+  var w = E('div');
+
+  var hero = E('div', {cls:'hero'});
+  hero.innerHTML = '<div style="opacity:.8;font-size:11px;margin-bottom:3px">' + new Date().toLocaleDateString('en-US', {weekday:'long',month:'long',day:'numeric'}) + '</div><div style="font-size:21px;font-weight:600;line-height:1.1;margin-bottom:10px">MCAS Manager</div><div class="hsg"><div class="hs"><div class="hsn">' + done + '/' + daily.length + '</div><div class="hsl">Daily tasks</div></div><div class="hs"><div class="hsn">' + tl.length + '</div><div class="hsl">Meals today</div></div><div class="hs"><div class="hsn">' + LS.get('tests',[]).length + '</div><div class="hsl">Tests on file</div></div></div>';
+  w.appendChild(hero);
+
+  if (nag.length) {
+    var nc = E('div', {cls:'warn', style:{marginBottom:'10px'}});
+    nc.appendChild(E('p', {cls:'wt'}, ['Reminders not done yet (' + nag.length + ')']));
+    var i;
+    for (i = 0; i < Math.min(nag.length, 3); i++) {
+      nc.appendChild(E('p', {style:{fontSize:'12px',color:'#6b6158',marginBottom:'2px'}}, ['- ' + nag[i].item]));
+    }
+    w.appendChild(nc);
+  }
+
+  var ep = E('div', {cls:'alrt', style:{padding:'9px 12px'}});
+  ep.innerHTML = '<span style="font-weight:700;color:#c94040;font-size:13px">Always carry your EpiPen</span>';
+  w.appendChild(ep);
+
+  w.appendChild(E('p', {style:{fontSize:'13px',fontWeight:'600',color:'#6b6158',marginBottom:'8px'}}, ['Quick Actions']));
+
+  var qg = E('div', {cls:'qg'});
+  var actions = [
+    {icon:'☑',label:'Daily',t:'cl'},
+    {icon:'📓',label:'Log Meal',t:'log'},
+    {icon:'📊',label:'Weekly',t:'weekly'},
+    {icon:'🪪',label:'Dr Card',t:'mycard'},
+    {icon:'🧪',label:'Supps',t:'supps'},
+    {icon:'👨‍⚕️',label:'Doctors',t:'docs'},
+    {icon:'📅',label:'Meals',t:'meals'},
+    {icon:'✅',label:'Home',t:'env'}
+  ];
+  var i;
+  for (i = 0; i < actions.length; i++) {
+    (function(a) {
+      var b = E('div', {cls:'qb'});
+      b.innerHTML = '<div class="qi">' + a.icon + '</div><div class="ql">' + a.label + '</div>';
+      b.onclick = function() { go(a.t); };
+      qg.appendChild(b);
+    })(actions[i]);
+  }
+  w.appendChild(qg);
+  root.appendChild(w);
+}
+
+function pgCL(root) {
+  var items = LS.get('cl', []);
+  var w = E('div');
+  w.appendChild(stitle('☑', 'Daily Checklist', 'Tap to check off. Auto-resets every morning.'));
+  var daily = items.filter(function(i) { return i.time !== 'Weekly'; });
+  var done = daily.filter(function(i) { return i.done; }).length;
+  var pct = Math.round(done / daily.length * 100);
+  var nag = items.filter(function(i) { return i.nag && !i.done && i.time !== 'Weekly'; });
+  var deg = pct * 3.6;
+  var da = (deg * 0.419).toFixed(1);
+
+  var prog = E('div', {cls:'prog'});
+  var ring = E('div', {cls:'ring'});
+  ring.innerHTML = '<svg width="54" height="54" viewBox="0 0 54 54" style="position:absolute;inset:0"><circle cx="27" cy="27" r="23" fill="none" stroke="#e8e0d4" stroke-width="5"/><circle cx="27" cy="27" r="23" fill="none" stroke="#2d8c7a" stroke-width="5" stroke-dasharray="' + da + ' 144.5" stroke-dashoffset="36.1" stroke-linecap="round" transform="rotate(-90 27 27)"/></svg><div class="ri">' + pct + '%</div>';
+  var pi = E('div');
+  pi.appendChild(E('p', {style:{fontSize:'15px',fontWeight:'600',color:'#2d8c7a'}}, [done + '/' + daily.length + ' done today']));
+  if (nag.length) pi.appendChild(E('p', {style:{fontSize:'11px',color:'#d4890a',marginTop:'2px'}}, [nag.length + ' reminder' + (nag.length > 1 ? 's' : '') + ' pending']));
+  prog.appendChild(ring); prog.appendChild(pi);
+  w.appendChild(prog);
+
+  var sf = false;
+  var fc = card(); fc.style.display = 'none';
+  var nc = '', ni = '', nt = 'Morning', nn = false;
+  var ci = E('input', {placeholder:'Category e.g. Morning'}); ci.oninput = function(e) { nc = e.target.value; };
+  var ii = E('input', {placeholder:'Task description'}); ii.oninput = function(e) { ni = e.target.value; };
+  var ts = E('select');
+  ['Morning','Lunch','Afternoon','Dinner','Evening','All day','Weekly'].forEach(function(t) { ts.appendChild(E('option', {value:t}, [t])); });
+  ts.onchange = function(e) { nt = e.target.value; };
+  var nb = E('button', {cls:'btn', style:{marginBottom:'8px',width:'100%',background:'transparent',color:'#9d9088',border:'2px solid #e8e0d4',borderRadius:'12px',padding:'8px 14px',fontSize:'12px',fontWeight:'600'}});
+  nb.textContent = 'Nag reminder OFF';
+  nb.onclick = function() { nn = !nn; nb.textContent = nn ? 'Nag reminder ON' : 'Nag reminder OFF'; nb.style.background = nn ? 'rgba(212,137,10,.1)' : 'transparent'; nb.style.color = nn ? '#d4890a' : '#9d9088'; };
+  fc.appendChild(fld('Category', ci)); fc.appendChild(fld('Task', ii)); fc.appendChild(fld('Time', ts)); fc.appendChild(nb);
+  fc.appendChild(mkBtn('Save Task', 'bt', function() {
+    if (!ni.trim()) return;
+    var cl = LS.get('cl', []);
+    cl.push({id:Date.now(),cat:nc||'Other',item:ni,time:nt,nag:nn,done:false,streak:0});
+    LS.set('cl', cl); go('cl');
+  }));
+
+  var ab = mkBtn('+ Add Task', 'bt', function() { sf = !sf; fc.style.display = sf ? 'block' : 'none'; ab.textContent = sf ? 'Cancel' : '+ Add Task'; });
+  ab.style.marginBottom = '10px';
+  w.appendChild(ab); w.appendChild(fc);
+
+  var cats = [];
+  items.forEach(function(i) { if (cats.indexOf(i.cat) < 0) cats.push(i.cat); });
+  cats.forEach(function(cat) {
+    w.appendChild(E('p', {cls:'cl'}, [cat]));
+    items.filter(function(i) { return i.cat === cat; }).forEach(function(item) {
+      var div = E('div', {cls:'ci' + (item.done ? ' dn' : '') + (item.nag && !item.done ? ' ng' : '')});
+      var box = E('div', {cls:'cb'});
+      if (item.done) box.innerHTML = '<svg width="13" height="13" viewBox="0 0 13 13"><path d="M2 6.5l3.5 3.5 5.5-6" stroke="white" stroke-width="2" fill="none" stroke-linecap="round"/></svg>';
+      var info = E('div', {style:{flex:'1'}});
+      var lr = E('div', {style:{display:'flex',alignItems:'center',gap:'5px',flexWrap:'wrap'}});
+      lr.appendChild(E('span', {style:{fontSize:'13px',fontWeight:item.done?'400':'500',color:item.done?'#9d9088':'#2a2520',textDecoration:item.done?'line-through':'none'}}, [item.item]));
+      if (item.nag && !item.done) lr.appendChild(E('span', {style:{fontSize:'10px',background:'#fef3e0',color:'#d4890a',padding:'1px 5px',borderRadius:'6px',fontWeight:'700'}}, ['reminder']));
+      if ((item.streak || 0) > 2) lr.appendChild(E('span', {style:{fontSize:'10px',background:'#eaf5ec',color:'#3a8c4a',padding:'1px 5px',borderRadius:'6px',fontWeight:'700'}}, [item.streak + ' streak']));
+      info.appendChild(lr);
+      info.appendChild(E('p', {style:{fontSize:'11px',color:'#9d9088',marginTop:'2px'}}, [item.time]));
+      var db = E('button', {cls:'del', style:{fontSize:'17px',marginLeft:'4px'}}, ['x']);
+      db.onclick = function(e) { e.stopPropagation(); LS.set('cl', LS.get('cl',[]).filter(function(x) { return x.id !== item.id; })); go('cl'); };
+      div.appendChild(box); div.appendChild(info); div.appendChild(db);
+      div.onclick = function() {
+        var cl = LS.get('cl', []);
+        LS.set('cl', cl.map(function(i) {
+          if (i.id !== item.id) return i;
+          return {id:i.id,cat:i.cat,item:i.item,time:i.time,nag:i.nag,done:!i.done,streak:i.done?Math.max(0,(i.streak||0)-1):(i.streak||0)+1};
+        }));
+        go('cl');
+      };
+      w.appendChild(div);
+    });
+  });
+  root.appendChild(w);
+}
+
+function pgLog(root) {
+  var w = E('div');
+  w.appendChild(stitle('📓', 'Daily Log', 'Log meals, workouts, sleep, and daily overview.'));
+  var sf = false, aFT = 'meal', sympSel = [];
+  var fd = {date:today(),meal:'Breakfast',foods:'',symptoms:[],sev:0,water:0,sleep:0,slQ:0,energy:0,stress:0,workout:false,wType:'',wFeel:0,wNotes:'',feel:'',notes:''};
+  var fc = card(); fc.style.display = 'none';
+  var fts = E('div', {cls:'stabs'});
+  var ftD = [{id:'meal',l:'Meal'},{id:'workout',l:'Workout'},{id:'sleep',l:'Sleep'},{id:'day',l:'Day'}];
+  ftD.forEach(function(t) {
+    var tb = E('button', {cls:'stab' + (t.id === aFT ? ' on' : '')}, [t.l]);
+    tb.onclick = function() {
+      aFT = t.id;
+      fts.querySelectorAll('.stab').forEach(function(b, i) { b.className = 'stab' + (ftD[i].id === t.id ? ' on' : ''); });
+      renderFT();
+    };
+    fts.appendChild(tb);
+  });
+  fc.appendChild(fts);
+  var di = E('input', {type:'date', value:fd.date}); di.onchange = function(e) { fd.date = e.target.value; }; fc.appendChild(fld('Date', di));
+  var ftc = E('div'); fc.appendChild(ftc);
+
+  function renderFT() {
+    ftc.innerHTML = '';
+    if (aFT === 'meal') {
+      var ms = E('select'); ['Breakfast','Lunch','Dinner','Snack','Supplement'].forEach(function(m) { ms.appendChild(E('option', {value:m}, [m])); }); ms.value = fd.meal; ms.onchange = function(e) { fd.meal = e.target.value; }; ftc.appendChild(fld('Meal', ms));
+      var ta = E('textarea', {placeholder:'Foods eaten, brand, how cooked, amounts...'}); ta.value = fd.foods; ta.oninput = function(e) { fd.foods = e.target.value; }; ftc.appendChild(fld('Foods eaten', ta));
+      ftc.appendChild(E('label', {cls:'fl'}, ['Symptoms after this meal']));
+      var sw = E('div', {style:{display:'flex',flexWrap:'wrap',gap:'4px',marginBottom:'8px'}});
+      SYMS.forEach(function(s) {
+        var ch = E('button', {cls:'sc'}, [s]);
+        ch.onclick = function() {
+          var idx = sympSel.indexOf(s);
+          if (idx >= 0) sympSel.splice(idx, 1); else sympSel.push(s);
+          ch.className = 'sc' + (sympSel.indexOf(s) >= 0 ? (s === 'No reaction' ? ' st' : ' sa') : '');
+        };
+        sw.appendChild(ch);
+      });
+      ftc.appendChild(sw);
+      ftc.appendChild(E('label', {cls:'fl'}, ['Reaction severity 1-10']));
+      ftc.appendChild(rbar(fd.sev, function(v) { fd.sev = v; }, 'at'));
+    }
+    if (aFT === 'workout') {
+      var wr = E('div', {style:{display:'flex',gap:'8px',marginBottom:'8px'}});
+      [true, false].forEach(function(v) {
+        var b = E('button', {cls:'btn' + (fd.workout === v ? ' bt' : ''), style:{flex:'1'}}, [v ? 'Yes worked out' : 'No workout']);
+        b.onclick = function() { fd.workout = v; renderFT(); };
+        wr.appendChild(b);
+      });
+      ftc.appendChild(fld('Did you work out?', wr));
+      if (fd.workout) {
+        var wt = E('select'); wt.appendChild(E('option', {value:''}, ['Select type...'])); WTYPES.forEach(function(t) { wt.appendChild(E('option', {value:t}, [t])); }); wt.onchange = function(e) { fd.wType = e.target.value; }; ftc.appendChild(fld('Type', wt));
+        ftc.appendChild(E('label', {cls:'fl'}, ['How did it feel? 1=exhausted 10=great']));
+        ftc.appendChild(rbar(fd.wFeel, function(v) { fd.wFeel = v; }, 'pl'));
+        var wn = E('textarea', {placeholder:'Any MCAS symptoms during or after?'}); wn.oninput = function(e) { fd.wNotes = e.target.value; }; ftc.appendChild(fld('Notes', wn));
+      }
+    }
+    if (aFT === 'sleep') {
+      var sh = E('input', {type:'number', step:'0.5', placeholder:'e.g. 7.5'}); sh.oninput = function(e) { fd.sleep = parseFloat(e.target.value) || 0; }; ftc.appendChild(fld('Hours slept', sh));
+      ftc.appendChild(E('label', {cls:'fl'}, ['Sleep quality 1=terrible 10=excellent']));
+      ftc.appendChild(rbar(fd.slQ, function(v) { fd.slQ = v; }, 'bl'));
+    }
+    if (aFT === 'day') {
+      ftc.appendChild(E('label', {cls:'fl'}, ['Energy level 1-10'])); ftc.appendChild(rbar(fd.energy, function(v) { fd.energy = v; }, 'gl'));
+      ftc.appendChild(E('label', {cls:'fl'}, ['Stress level 1-10'])); ftc.appendChild(rbar(fd.stress, function(v) { fd.stress = v; }, 'rl'));
+      ftc.appendChild(E('label', {cls:'fl'}, ['Glasses of water']));
+      var ww = E('div', {style:{display:'flex',gap:'4px',flexWrap:'wrap',marginBottom:'8px'}});
+      var wi;
+      for (wi = 0; wi <= 8; wi++) {
+        (function(n) {
+          var b = E('button', {cls:'rb' + (fd.water >= n && n > 0 ? ' bl' : '')}, [String(n)]);
+          b.onclick = function() { fd.water = n; ww.querySelectorAll('.rb').forEach(function(rb, ri) { rb.className = 'rb' + (n >= ri + 1 ? ' bl' : ''); }); };
+          ww.appendChild(b);
+        })(wi);
+      }
+      ftc.appendChild(ww);
+      var of = E('select'); of.appendChild(E('option', {value:''}, ['Overall feeling...'])); ['Good day','Okay','Not great','Bad reaction day','Very fatigued','Strong day'].forEach(function(o) { of.appendChild(E('option', {value:o}, [o])); }); of.onchange = function(e) { fd.feel = e.target.value; }; ftc.appendChild(fld('Overall feeling', of));
+      var nt = E('textarea', {placeholder:'Notes: environment, new products, stressors...'}); nt.oninput = function(e) { fd.notes = e.target.value; }; ftc.appendChild(fld('Notes', nt));
+    }
+    var sb = mkBtn('Save Entry', 'bt', function() {
+      fd.symptoms = sympSel;
+      if (!fd.foods.trim() && !fd.workout && !fd.sleep) return;
+      var logs = LS.get('logs', []);
+      logs.unshift({id:Date.now(),date:fd.date,meal:fd.meal,foods:fd.foods,symptoms:fd.symptoms,sev:fd.sev,water:fd.water,sleep:fd.sleep,slQ:fd.slQ,energy:fd.energy,stress:fd.stress,workout:fd.workout,wType:fd.wType,wFeel:fd.wFeel,wNotes:fd.wNotes,feel:fd.feel,notes:fd.notes});
+      LS.set('logs', logs); go('log');
+    });
+    sb.style.marginTop = '8px'; ftc.appendChild(sb);
+  }
+  renderFT();
+
+  var ab = mkBtn('+ Add Entry', 'bt', function() { sf = !sf; fc.style.display = sf ? 'block' : 'none'; ab.textContent = sf ? 'Cancel' : '+ Add Entry'; });
+  ab.style.marginBottom = '10px';
+  w.appendChild(ab); w.appendChild(fc);
+
+  var logs = LS.get('logs', []);
+  var allDates = [];
+  logs.forEach(function(l) { if (allDates.indexOf(l.date) < 0) allDates.push(l.date); });
+  allDates.sort(function(a,b) { return b.localeCompare(a); });
+  allDates = allDates.slice(0, 30);
+
+  if (!allDates.length) { w.appendChild(E('p', {style:{color:'#9d9088',textAlign:'center',padding:'24px 0',fontSize:'13px'}}, ['Start logging to see entries here.'])); root.appendChild(w); return; }
+
+  var vd = today();
+  var ds = E('div', {cls:'ds'});
+  var la = E('div');
+
+  function renderLA() {
+    la.innerHTML = '';
+    var dayLogs = logs.filter(function(l) { return l.date === vd; });
+    dayLogs.forEach(function(e) {
+      var c = card();
+      var tr = E('div', {style:{display:'flex',justifyContent:'space-between',alignItems:'flex-start',marginBottom:'8px'}});
+      var pr = E('div', {style:{display:'flex',gap:'4px',flexWrap:'wrap'}});
+      if (e.meal) pr.appendChild(pill(e.meal, '#2d8c7a'));
+      if (e.workout) pr.appendChild(pill('Workout' + (e.wType ? ' ' + e.wType : ''), '#7c5cbf'));
+      if (e.sleep > 0) pr.appendChild(pill(e.sleep + 'h sleep', '#3a6fa8'));
+      if (e.feel) pr.appendChild(pill(e.feel, '#6b6158'));
+      var db = E('button', {cls:'del', style:{fontSize:'18px',marginLeft:'6px'}}, ['x']);
+      db.onclick = function() { LS.set('logs', LS.get('logs',[]).filter(function(x) { return x.id !== e.id; })); renderLA(); };
+      tr.appendChild(pr); tr.appendChild(db); c.appendChild(tr);
+      if (e.foods) { var fp = E('p', {style:{fontSize:'12px',color:'#2a2520',marginBottom:'5px',lineHeight:'1.5'}}); fp.innerHTML = '<span style="font-weight:600;color:#9d9088">Foods: </span>' + e.foods; c.appendChild(fp); }
+      if (e.symptoms && e.symptoms.length) {
+        var sr = E('div', {style:{display:'flex',flexWrap:'wrap',gap:'3px',marginBottom:'5px'}});
+        e.symptoms.forEach(function(s) { sr.appendChild(pill(s, s === 'No reaction' ? '#2d8c7a' : '#d4890a')); });
+        if (e.sev > 0) sr.appendChild(pill('Severity ' + e.sev + '/10', '#c94040'));
+        c.appendChild(sr);
+      }
+      if (e.energy > 0 || e.stress > 0) c.appendChild(E('p', {style:{fontSize:'11px',color:'#9d9088'}}, ['Energy ' + e.energy + '/10, Stress ' + e.stress + '/10' + (e.water > 0 ? ', Water ' + e.water : '')]));
+      if (e.notes) c.appendChild(E('p', {style:{fontSize:'11px',color:'#9d9088',fontStyle:'italic',marginTop:'3px',lineHeight:'1.4'}}, [e.notes]));
+      la.appendChild(c);
+    });
+    if (!dayLogs.length) la.appendChild(E('p', {style:{color:'#9d9088',textAlign:'center',padding:'16px 0',fontSize:'13px'}}, ['No entries for this date.']));
+  }
+
+  allDates.forEach(function(d) {
+    (function(date) {
+      var b = E('button', {cls:'db' + (date === vd ? ' on' : '')}, [fmtD(date)]);
+      b.onclick = function() {
+        vd = date;
+        ds.querySelectorAll('.db').forEach(function(btn, i) { btn.className = 'db' + (allDates[i] === date ? ' on' : ''); });
+        renderLA();
+      };
+      ds.appendChild(b);
+    })(d);
+  });
+
+  w.appendChild(ds); renderLA(); w.appendChild(la); root.appendChild(w);
+}
+
+function pgFood(root) {
+  var w = E('div');
+  w.appendChild(stitle('🥗', 'Food Guide', 'Your safe and avoid lists.'));
+  var sub = 'avoid';
+  var tabs = E('div', {cls:'stabs'}); var area = E('div');
+  [{id:'avoid',l:'Avoid'},{id:'safe',l:'Safe Foods'}].forEach(function(t) {
+    var tb = E('button', {cls:'stab' + (t.id === sub ? ' on' : '')}, [t.l]);
+    tb.onclick = function() { sub = t.id; tabs.querySelectorAll('.stab').forEach(function(b, i) { b.className = 'stab' + (['avoid','safe'][i] === t.id ? ' on' : ''); }); renderA(); };
+    tabs.appendChild(tb);
+  });
+  w.appendChild(tabs);
+  var fc2 = '', fi = '', fe = '';
+  var fc = card();
+  var ci = E('input', {placeholder:'Category'}); ci.oninput = function(e) { fc2 = e.target.value; };
+  var ii = E('input', {placeholder:'Food item'}); ii.oninput = function(e) { fi = e.target.value; };
+  var ei = E('input', {placeholder:'Reason or notes'}); ei.oninput = function(e) { fe = e.target.value; };
+  fc.appendChild(fld('', ci)); fc.appendChild(fld('', ii)); fc.appendChild(fld('', ei));
+  fc.appendChild(mkBtn('+ Add', 'bt', function() {
+    if (!fi.trim()) return;
+    var key = sub === 'avoid' ? 'avoid' : 'safe';
+    var list = LS.get(key, []);
+    list.push({id:Date.now(),cat:fc2||'Other',item:fi,reason:fe,notes:fe});
+    LS.set(key, list); ci.value=''; ii.value=''; ei.value=''; fc2=''; fi=''; fe=''; renderA();
+  }));
+  w.appendChild(fc); w.appendChild(area);
+
+  function renderA() {
+    area.innerHTML = '';
+    var key = sub === 'avoid' ? 'avoid' : 'safe';
+    var col = sub === 'avoid' ? '#c94040' : '#2d8c7a';
+    var list = LS.get(key, []);
+    var cats = [];
+    list.forEach(function(i) { if (cats.indexOf(i.cat) < 0) cats.push(i.cat); });
+    cats.forEach(function(c) {
+      var cl = E('p', {style:{fontSize:'11px',fontWeight:'700',color:col,textTransform:'uppercase',letterSpacing:'.05em',marginBottom:'6px',marginTop:'10px'}}, [c]);
+      area.appendChild(cl);
+      list.filter(function(i) { return i.cat === c; }).forEach(function(i) {
+        var row = E('div', {cls:sub === 'avoid' ? 'avoid-row' : 'safe-row'});
+        var info = E('div', {style:{flex:'1'}});
+        info.appendChild(E('p', {style:{fontSize:'13px',fontWeight:'500'}}, [i.item]));
+        var note = i.reason || i.notes;
+        if (note) info.appendChild(E('p', {style:{fontSize:'11px',color:'#9d9088',marginTop:'2px'}}, [note]));
+        var db = E('button', {cls:'del'}, ['x']);
+        db.onclick = function() { var l = LS.get(key,[]); LS.set(key, l.filter(function(x) { return x.id !== i.id; })); renderA(); };
+        row.appendChild(info); row.appendChild(db); area.appendChild(row);
+      });
+    });
+  }
+  renderA(); root.appendChild(w);
+}
+
+function pgMeds(root) {
+  var w = E('div');
+  w.appendChild(stitle('💊', 'Medication Alert', 'Show to every provider before treatment begins.'));
+  var al = E('div', {cls:'alrt'});
+  al.innerHTML = '<p class="at2">For Any Medical Provider</p><p class="ab">Suspected MCAS, lifelong anaphylaxis history. EpiPen always carried. Pre-medicate H1 plus H2 antihistamine plus corticosteroid before any procedure. Teeth extremely sensitive, very difficult to numb.</p>';
+  w.appendChild(al);
+  var fc = card(); var fs = 'High Risk', fitem = '', fr = '';
+  var ss = E('select'); ['Critical','High Risk','Medium Risk','Protocol'].forEach(function(s) { ss.appendChild(E('option', {value:s}, [s])); }); ss.onchange = function(e) { fs = e.target.value; };
+  var ni = E('input', {placeholder:'Medication name'}); ni.oninput = function(e) { fitem = e.target.value; };
+  var ri = E('input', {placeholder:'Reaction or what provider should know'}); ri.oninput = function(e) { fr = e.target.value; };
+  fc.appendChild(fld('Severity', ss)); fc.appendChild(fld('Drug or item', ni)); fc.appendChild(fld('Reaction', ri));
+  fc.appendChild(mkBtn('+ Add Alert', 'br', function() {
+    if (!fitem.trim()) return;
+    var m = LS.get('meds', []); m.push({id:Date.now(),sev:fs,item:fitem,reaction:fr}); LS.set('meds', m);
+    ni.value = ''; ri.value = ''; fitem = ''; fr = ''; renderL();
+  }));
+  w.appendChild(fc); var la = E('div'); w.appendChild(la);
+
+  function renderL() {
+    la.innerHTML = '';
+    var meds = LS.get('meds', []);
+    var sevColors = {Critical:'#c94040','High Risk':'#c94040','Medium Risk':'#d4890a',Protocol:'#3a6fa8'};
+    ['Critical','High Risk','Medium Risk','Protocol'].forEach(function(sev) {
+      var items = meds.filter(function(m) { return m.sev === sev; });
+      if (!items.length) return;
+      la.appendChild(E('p', {style:{fontSize:'11px',fontWeight:'700',color:sevColors[sev]||'#6b6158',textTransform:'uppercase',letterSpacing:'.05em',marginBottom:'6px',marginTop:'10px'}}, [sev]));
+      items.forEach(function(m) {
+        var c = card();
+        var row = E('div', {style:{display:'flex',alignItems:'flex-start',gap:'8px'}});
+        var info = E('div', {style:{flex:'1'}});
+        info.appendChild(E('p', {style:{fontSize:'13px',fontWeight:'600',marginBottom:'3px'}}, [m.item]));
+        if (m.reaction) info.appendChild(E('p', {style:{fontSize:'12px',color:'#9d9088',lineHeight:'1.5'}}, [m.reaction]));
+        var db = E('button', {cls:'del', style:{fontSize:'18px'}}, ['x']);
+        db.onclick = function() { LS.set('meds', LS.get('meds',[]).filter(function(x) { return x.id !== m.id; })); renderL(); };
+        row.appendChild(info); row.appendChild(db); c.appendChild(row); la.appendChild(c);
+      });
+    });
+  }
+  renderL(); root.appendChild(w);
+}
+
+function pgSupps(root) {
+  var w = E('div');
+  w.appendChild(stitle('🧪', 'Supplements', 'Track everything. Cross-reference with your Viome kit.'));
+  var warn = E('div', {cls:'warn'});
+  warn.innerHTML = '<p class="wt">Viome Reminder</p><p class="wb">Before adding any supplement check your Viome results. B6 causes nerve damage at high doses. Introduce one at a time.</p>';
+  w.appendChild(warn);
+  var fc = card(); var fn = '', fd2 = '', ff = '', fnotes = '', fv = false;
+  var ni = E('input', {placeholder:'Supplement name'}); ni.oninput = function(e) { fn = e.target.value; };
+  var g2 = E('div', {cls:'g2'});
+  var di = E('input', {placeholder:'Dose e.g. 500mg'}); di.oninput = function(e) { fd2 = e.target.value; };
+  var fri = E('input', {placeholder:'Frequency'}); fri.oninput = function(e) { ff = e.target.value; };
+  g2.appendChild(di); g2.appendChild(fri);
+  var no = E('textarea', {placeholder:'Notes, warnings, Viome recommendation...'}); no.style.minHeight = '50px'; no.oninput = function(e) { fnotes = e.target.value; };
+  var vb = E('button', {cls:'btn', style:{marginBottom:'8px',width:'100%',background:'transparent',color:'#9d9088',border:'2px solid #e8e0d4',borderRadius:'12px',padding:'7px 14px',fontSize:'12px',fontWeight:'600'}});
+  vb.textContent = 'Mark as Viome recommended';
+  vb.onclick = function() { fv = !fv; vb.textContent = fv ? 'Viome recommended ON' : 'Mark as Viome recommended'; vb.style.background = fv ? 'rgba(58,140,74,.1)' : 'transparent'; vb.style.color = fv ? '#3a8c4a' : '#9d9088'; };
+  fc.appendChild(fld('Name', ni)); fc.appendChild(fld('Dose and Frequency', g2)); fc.appendChild(fld('Notes', no)); fc.appendChild(vb);
+  fc.appendChild(mkBtn('+ Add Supplement', 'bg', function() {
+    if (!fn.trim()) return;
+    var s = LS.get('supps', []); s.push({id:Date.now(),name:fn,dose:fd2,freq:ff,status:'Taking',notes:fnotes,viome:fv}); LS.set('supps', s);
+    ni.value=''; di.value=''; fri.value=''; no.value=''; fn=''; fd2=''; ff=''; fnotes=''; fv=false; vb.style.background='transparent'; vb.style.color='#9d9088'; vb.textContent='Mark as Viome recommended';
+    renderSL();
+  }));
+  w.appendChild(fc); var la = E('div'); w.appendChild(la);
+
+  function renderSL() {
+    la.innerHTML = '';
+    var items = LS.get('supps', []);
+    var taking = items.filter(function(i) { return i.status === 'Taking'; });
+    var other = items.filter(function(i) { return i.status !== 'Taking'; });
+    if (taking.length) {
+      la.appendChild(E('p', {style:{fontSize:'11px',fontWeight:'700',color:'#3a8c4a',textTransform:'uppercase',letterSpacing:'.05em',marginBottom:'6px',marginTop:'4px'}}, ['Currently Taking']));
+      taking.forEach(renderSItem);
+    }
+    if (other.length) {
+      la.appendChild(E('p', {style:{fontSize:'11px',fontWeight:'700',color:'#9d9088',textTransform:'uppercase',letterSpacing:'.05em',marginBottom:'6px',marginTop:'12px'}}, ['Paused or Not Started']));
+      other.forEach(renderSItem);
+    }
+  }
+
+  function renderSItem(i) {
+    var isTaking = i.status === 'Taking';
+    var c = E('div', {style:{background:isTaking?'#eaf5ec':'#fdf9f4',borderRadius:'13px',padding:'12px',marginBottom:'7px',border:'1px solid ' + (isTaking?'rgba(58,140,74,.2)':'#e8e0d4')}});
+    var row = E('div', {style:{display:'flex',justifyContent:'space-between',alignItems:'flex-start'}});
+    var info = E('div', {style:{flex:'1'}});
+    var nr = E('div', {style:{display:'flex',gap:'4px',alignItems:'center',flexWrap:'wrap',marginBottom:'3px'}});
+    nr.appendChild(E('span', {style:{fontWeight:'600',fontSize:'13px'}}, [i.name]));
+    if (i.viome) nr.appendChild(pill('Viome', '#3a8c4a'));
+    if (i.dose) nr.appendChild(pill(i.dose, '#6b6158'));
+    info.appendChild(nr);
+    if (i.freq) info.appendChild(E('p', {style:{fontSize:'11px',color:'#9d9088',marginBottom:'2px'}}, [i.freq]));
+    if (i.notes) info.appendChild(E('p', {style:{fontSize:'11px',color:i.notes.indexOf('WARNING')>=0?'#d4890a':'#9d9088',lineHeight:'1.4'}}, [i.notes]));
+    var btns = E('div', {style:{display:'flex',gap:'4px',flexShrink:'0',marginLeft:'6px'}});
+    if (isTaking) {
+      var pb = E('button', {cls:'btn bsm', style:{background:'#fff',color:'#9d9088',border:'1px solid #e8e0d4'}}, ['Pause']);
+      pb.onclick = function() { LS.set('supps', LS.get('supps',[]).map(function(x) { return x.id===i.id?{id:x.id,name:x.name,dose:x.dose,freq:x.freq,status:'Paused',notes:x.notes,viome:x.viome}:x; })); renderSL(); };
+      btns.appendChild(pb);
+    }
+    var db = E('button', {cls:'del', style:{fontSize:'18px'}}, ['x']);
+    db.onclick = function() { LS.set('supps', LS.get('supps',[]).filter(function(x) { return x.id !== i.id; })); renderSL(); };
+    btns.appendChild(db); row.appendChild(info); row.appendChild(btns); c.appendChild(row); la.appendChild(c);
+  }
+  renderSL(); root.appendChild(w);
+}
+
+function pgTests(root) {
+  var w = E('div');
+  w.appendChild(stitle('🧫', 'Tests and Results', 'All tests in one place. Share with any new doctor.'));
+  var sf = false, fd2 = '', ft = '', fp = '', fr = '', fn = '';
+  var fc = card(); fc.style.display = 'none';
+  var g2 = E('div', {cls:'g2'});
+  var di = E('input', {type:'date'}); di.onchange = function(e) { fd2 = e.target.value; };
+  var ts = E('select'); ts.appendChild(E('option', {value:''}, ['Select type...'])); TTYPES.forEach(function(t) { ts.appendChild(E('option', {value:t}, [t])); }); ts.onchange = function(e) { ft = e.target.value; };
+  var dw = E('div'); dw.appendChild(E('label', {cls:'fl'}, ['Date'])); dw.appendChild(di);
+  var tw = E('div'); tw.appendChild(E('label', {cls:'fl'}, ['Type'])); tw.appendChild(ts);
+  g2.appendChild(dw); g2.appendChild(tw);
+  var pi = E('input', {placeholder:'Provider or lab name'}); pi.oninput = function(e) { fp = e.target.value; };
+  var ri = E('input', {placeholder:'Result e.g. Tryptase 12 ng/mL'}); ri.oninput = function(e) { fr = e.target.value; };
+  var ni = E('textarea', {placeholder:'What the doctor said, follow-up needed...'}); ni.oninput = function(e) { fn = e.target.value; };
+  fc.appendChild(fld('', g2)); fc.appendChild(fld('Provider', pi)); fc.appendChild(fld('Result', ri)); fc.appendChild(fld('Notes', ni));
+  fc.appendChild(mkBtn('Save Test', 'bb', function() {
+    if (!ft || !fd2) return;
+    var t = LS.get('tests', []); t.unshift({id:Date.now(),date:fd2,type:ft,provider:fp,result:fr,notes:fn}); LS.set('tests', t);
+    di.value=''; ts.value=''; pi.value=''; ri.value=''; ni.value=''; fd2=''; ft=''; fp=''; fr=''; fn=''; renderL();
+  }));
+  var ab = mkBtn('+ Add Test or Result', 'bb', function() { sf = !sf; fc.style.display = sf ? 'block' : 'none'; ab.textContent = sf ? 'Cancel' : '+ Add Test or Result'; });
+  ab.style.marginBottom = '10px';
+  w.appendChild(ab); w.appendChild(fc);
+  var la = E('div'); w.appendChild(la);
+
+  function renderL() {
+    la.innerHTML = '';
+    var tests = LS.get('tests', []);
+    if (!tests.length) { la.appendChild(E('p', {style:{color:'#9d9088',textAlign:'center',padding:'24px 0',fontSize:'13px'}}, ['Add your tests so any new doctor sees your complete history.'])); return; }
+    tests.forEach(function(t) {
+      var c = card();
+      var row = E('div', {style:{display:'flex',justifyContent:'space-between',alignItems:'flex-start'}});
+      var info = E('div', {style:{flex:'1'}});
+      var pr = E('div', {style:{display:'flex',gap:'4px',flexWrap:'wrap',marginBottom:'5px'}});
+      pr.appendChild(pill(t.type, '#3a6fa8')); pr.appendChild(pill(fmtD(t.date), '#6b6158')); info.appendChild(pr);
+      if (t.provider) { var pp = E('p', {style:{fontSize:'12px',color:'#6b6158',marginBottom:'2px'}}); pp.innerHTML = '<span style="font-weight:600">Provider: </span>' + t.provider; info.appendChild(pp); }
+      if (t.result) { var rp = E('p', {style:{fontSize:'12px',color:'#2a2520',marginBottom:'2px'}}); rp.innerHTML = '<span style="font-weight:600">Result: </span>' + t.result; info.appendChild(rp); }
+      if (t.notes) info.appendChild(E('p', {style:{fontSize:'11px',color:'#9d9088',lineHeight:'1.4',marginTop:'3px'}}, [t.notes]));
+      var db = E('button', {cls:'del', style:{fontSize:'18px',marginLeft:'6px',flexShrink:'0'}}, ['x']);
+      db.onclick = function() { LS.set('tests', LS.get('tests',[]).filter(function(x) { return x.id !== t.id; })); renderL(); };
+      row.appendChild(info); row.appendChild(db); c.appendChild(row); la.appendChild(c);
+    });
+  }
+  renderL(); root.appendChild(w);
+}
+
+function pgDocs(root) {
+  var w = E('div');
+  w.appendChild(stitle('👨‍⚕️', 'My Doctors', 'Track each doctor and their recommendations.'));
+  var sDF = false, sRF = false;
+  var df = {name:'',specialty:'',phone:'',address:'',notes:'',lastVisit:''};
+  var rf = {docId:'',type:'Test',description:'',alreadyDone:false,doneNotes:''};
+  var docFC = card(); docFC.style.display = 'none';
+  var fieldDefs = {name:'Doctor name',specialty:'Specialty e.g. Allergist',phone:'Phone number',address:'Address or hospital'};
+  var fk;
+  for (fk in fieldDefs) {
+    (function(field, ph) {
+      var inp = E('input', {placeholder:ph}); inp.oninput = function(e) { df[field] = e.target.value; }; docFC.appendChild(fld('', inp));
+    })(fk, fieldDefs[fk]);
+  }
+  var lvd = E('input', {type:'date'}); lvd.onchange = function(e) { df.lastVisit = e.target.value; }; docFC.appendChild(fld('Last visit', lvd));
+  var dno = E('textarea', {placeholder:'Notes about this provider...'}); dno.oninput = function(e) { df.notes = e.target.value; }; docFC.appendChild(fld('Notes', dno));
+  docFC.appendChild(mkBtn('Save Doctor', 'bb', function() {
+    if (!df.name.trim()) return;
+    var d = LS.get('doctors', []); d.push({id:Date.now(),name:df.name,specialty:df.specialty,phone:df.phone,address:df.address,notes:df.notes,lastVisit:df.lastVisit}); LS.set('doctors', d);
+    df = {name:'',specialty:'',phone:'',address:'',notes:'',lastVisit:''}; docFC.querySelectorAll('input,textarea').forEach(function(i) { i.value=''; }); renderL();
+  }));
+  var recFC = card(); recFC.style.display = 'none';
+  var ds = E('select'); ds.appendChild(E('option', {value:''}, ['Select doctor...'])); ds.onchange = function(e) { rf.docId = e.target.value; };
+  function refreshDS() { while (ds.options.length > 1) ds.remove(1); LS.get('doctors',[]).forEach(function(d) { ds.appendChild(E('option', {value:String(d.id)}, [d.name])); }); }
+  var ts = E('select'); ['Test','Treatment','Medication','Referral','Lifestyle','Follow-up'].forEach(function(t) { ts.appendChild(E('option', {value:t}, [t])); }); ts.onchange = function(e) { rf.type = e.target.value; };
+  var rd = E('textarea', {placeholder:'What did they recommend? Be specific.'}); rd.oninput = function(e) { rf.description = e.target.value; };
+  var adB = E('button', {cls:'btn', style:{marginBottom:'8px',width:'100%',background:'transparent',color:'#9d9088',border:'2px solid #e8e0d4',borderRadius:'12px',padding:'9px',fontSize:'12px',fontWeight:'600'}});
+  adB.textContent = 'Mark as already done';
+  adB.onclick = function() { rf.alreadyDone = !rf.alreadyDone; adB.textContent = rf.alreadyDone ? 'Already done ON' : 'Mark as already done'; adB.style.background = rf.alreadyDone ? '#e8f0fb' : 'transparent'; adB.style.color = rf.alreadyDone ? '#3a6fa8' : '#9d9088'; };
+  recFC.appendChild(fld('Doctor', ds)); recFC.appendChild(fld('Type', ts)); recFC.appendChild(fld('Recommendation', rd)); recFC.appendChild(adB);
+  recFC.appendChild(mkBtn('Save Recommendation', 'bt', function() {
+    if (!rf.description.trim() || !rf.docId) return;
+    var r = LS.get('docRecs', []); r.push({id:Date.now(),status:rf.alreadyDone?'Already Done':'Pending',docId:rf.docId,type:rf.type,description:rf.description,alreadyDone:rf.alreadyDone,doneNotes:rf.doneNotes}); LS.set('docRecs', r);
+    rd.value=''; rf={docId:'',type:'Test',description:'',alreadyDone:false,doneNotes:''}; renderL();
+  }));
+  var br = E('div', {style:{display:'flex',gap:'8px',marginBottom:'10px'}});
+  var adb = E('button', {cls:'btn bb bsm', style:{flex:'1'}}); adb.textContent = '+ Add Doctor';
+  adb.onclick = function() { sDF = !sDF; docFC.style.display = sDF ? 'block' : 'none'; adb.textContent = sDF ? 'Cancel' : '+ Add Doctor'; refreshDS(); };
+  var arb = E('button', {cls:'btn bt bsm', style:{flex:'1'}}); arb.textContent = '+ Add Recommendation';
+  arb.onclick = function() { sRF = !sRF; recFC.style.display = sRF ? 'block' : 'none'; arb.textContent = sRF ? 'Cancel' : '+ Add Recommendation'; refreshDS(); };
+  br.appendChild(adb); br.appendChild(arb); w.appendChild(br); w.appendChild(docFC); w.appendChild(recFC);
+  var la = E('div'); w.appendChild(la);
+
+  function genShare(doc) {
+    var recs = LS.get('docRecs',[]).filter(function(r) { return r.docId === String(doc.id); });
+    var tests = LS.get('tests',[]);
+    return 'PATIENT SUMMARY FOR ' + doc.name.toUpperCase() + '\nDate: ' + new Date().toLocaleDateString() + '\n\nCONDITION: Suspected MCAS, lifelong anaphylaxis history\nFamily: Mother and 2 sisters MS, Nephew and Son MCAS and POTS.\n\nRECOMMENDATIONS:\n' + (recs.length ? recs.map(function(r) { return '- [' + r.status + '] ' + r.description; }).join('\n') : 'None recorded') + '\n\nTESTS COMPLETED:\n' + (tests.length ? tests.map(function(t) { return '- ' + t.type + ' (' + t.date + '): ' + (t.result||'logged'); }).join('\n') : 'None logged') + '\n\nALERTS: NSAIDs, morphine, contrast dyes HIGH RISK\nEpiPen always carried. Pre-medicate before procedures.';
+  }
+
+  function renderL() {
+    la.innerHTML = '';
+    var docs = LS.get('doctors', []); var recs = LS.get('docRecs', []);
+    if (!docs.length) { la.appendChild(E('p', {style:{color:'#9d9088',textAlign:'center',padding:'24px 0',fontSize:'13px'}}, ['Add your doctors and track every recommendation.'])); return; }
+    docs.forEach(function(doc) {
+      var dr = recs.filter(function(r) { return r.docId === String(doc.id); });
+      var pending = dr.filter(function(r) { return r.status === 'Pending'; });
+      var exp = false; var c = card();
+      var tr = E('div', {style:{display:'flex',justifyContent:'space-between',alignItems:'flex-start',marginBottom:'7px'}});
+      var info = E('div', {style:{flex:'1',cursor:'pointer'}});
+      info.onclick = function() { exp = !exp; expA.style.display = exp ? 'block' : 'none'; };
+      info.appendChild(E('p', {style:{fontSize:'15px',fontWeight:'600'}}, [doc.name]));
+      var pr = E('div', {style:{display:'flex',gap:'4px',flexWrap:'wrap',marginTop:'3px'}});
+      if (doc.specialty) pr.appendChild(pill(doc.specialty, '#3a6fa8'));
+      if (pending.length) pr.appendChild(pill(pending.length + ' pending', '#d4890a'));
+      pr.appendChild(pill(dr.length + ' recs', '#6b6158'));
+      info.appendChild(pr);
+      var btns = E('div', {style:{display:'flex',gap:'4px',flexShrink:'0',marginLeft:'6px'}});
+      var sb = E('button', {cls:'btn bsm', style:{background:'#e8f0fb',color:'#3a6fa8',border:'1px solid rgba(58,111,168,.25)'}}, ['Share']);
+      sb.onclick = function() {
+        var text = genShare(doc);
+        var overlay = E('div', {cls:'modal'});
+        var box = E('div', {cls:'mbox'});
+        box.appendChild(E('p', {style:{fontSize:'15px',fontWeight:'600',marginBottom:'10px'}}, ['Share Report - ' + doc.name]));
+        var ta = E('textarea', {style:{fontSize:'11px',fontFamily:'monospace',height:'150px',marginBottom:'10px'}}); ta.readOnly = true; ta.value = text; box.appendChild(ta);
+        var cb = mkBtn('Copy to Clipboard', 'bb', function() {
+          if (navigator && navigator.clipboard) { navigator.clipboard.writeText(text); }
+          else { ta.select(); document.execCommand('copy'); }
+          cb.textContent = 'Copied!'; setTimeout(function() { cb.textContent = 'Copy to Clipboard'; }, 2000);
+        });
+        box.appendChild(cb);
+        var cl = E('button', {cls:'btn', style:{marginTop:'6px',width:'100%',background:'transparent',color:'#9d9088',border:'2px solid #e8e0d4',borderRadius:'12px',padding:'10px',fontSize:'14px',fontWeight:'600'}}); cl.textContent = 'Close'; cl.onclick = function() { document.body.removeChild(overlay); };
+        box.appendChild(cl); overlay.appendChild(box); overlay.onclick = function(e) { if (e.target === overlay) document.body.removeChild(overlay); }; document.body.appendChild(overlay);
+      };
+      var db = E('button', {cls:'del', style:{fontSize:'18px'}}, ['x']); db.onclick = function() { LS.set('doctors', LS.get('doctors',[]).filter(function(x) { return x.id !== doc.id; })); renderL(); };
+      btns.appendChild(sb); btns.appendChild(db); tr.appendChild(info); tr.appendChild(btns); c.appendChild(tr);
+      var expA = E('div', {style:{display:'none',marginTop:'8px',borderTop:'1px solid #e8e0d4',paddingTop:'8px'}});
+      if (!dr.length) expA.appendChild(E('p', {style:{fontSize:'12px',color:'#9d9088',textAlign:'center',padding:'8px 0'}}, ['No recommendations logged yet.']));
+      dr.forEach(function(r) {
+        var rc = E('div', {style:{background:'#fdf9f4',borderRadius:'10px',padding:'10px',marginBottom:'6px',border:'1px solid #e8e0d4'}});
+        var rpr = E('div', {style:{display:'flex',gap:'4px',flexWrap:'wrap',marginBottom:'5px'}});
+        rpr.appendChild(pill(r.type, '#6b6158')); rpr.appendChild(pill(r.status, r.status==='Pending'?'#d4890a':r.status==='Completed'?'#3a8c4a':'#3a6fa8')); rc.appendChild(rpr);
+        rc.appendChild(E('p', {style:{fontSize:'12px',color:'#2a2520',lineHeight:'1.4',marginBottom:'6px'}}, [r.description]));
+        if (r.status === 'Pending') {
+          var br2 = E('div', {style:{display:'flex',gap:'5px'}});
+          var mb = E('button', {cls:'btn bsm', style:{flex:'1',background:'#eaf5ec',color:'#3a8c4a',border:'1px solid rgba(58,140,74,.25)'}}, ['Mark Done']);
+          mb.onclick = function() { LS.set('docRecs', LS.get('docRecs',[]).map(function(x) { return x.id===r.id?{id:x.id,status:'Completed',docId:x.docId,type:x.type,description:x.description,alreadyDone:x.alreadyDone,doneNotes:x.doneNotes}:x; })); renderL(); };
+          br2.appendChild(mb); rc.appendChild(br2);
+        }
+        expA.appendChild(rc);
+      });
+      c.appendChild(expA); la.appendChild(c);
+    });
+  }
+  renderL(); root.appendChild(w);
+}
+
+function pgWeekly(root) {
+  var w = E('div');
+  w.appendChild(stitle('📊', 'Weekly Summary', 'Auto-generated from your logs. Share with your doctor.'));
+  var logs = LS.get('logs', []);
+  var wAgo = new Date(Date.now() - 7 * 864e5).toISOString().split('T')[0];
+  var wl = logs.filter(function(l) { return l.date >= wAgo; });
+  var wD = wl.filter(function(l) { return l.workout; }).length;
+  var sl = wl.filter(function(l) { return l.sleep > 0; });
+  var avgSl = sl.length ? (sl.reduce(function(a, l) { return a + l.sleep; }, 0) / sl.length).toFixed(1) : null;
+  var el2 = wl.filter(function(l) { return l.energy > 0; });
+  var avgE = el2.length ? (el2.reduce(function(a, l) { return a + l.energy; }, 0) / el2.length).toFixed(1) : null;
+  var stl = wl.filter(function(l) { return l.stress > 0; });
+  var avgSt = stl.length ? (stl.reduce(function(a, l) { return a + l.stress; }, 0) / stl.length).toFixed(1) : null;
+  var sc2 = {};
+  wl.forEach(function(l) { (l.symptoms||[]).forEach(function(s) { if (s !== 'No reaction') sc2[s] = (sc2[s] || 0) + 1; }); });
+  var topS = [];
+  var sk;
+  for (sk in sc2) topS.push([sk, sc2[sk]]);
+  topS.sort(function(a, b) { return b[1] - a[1]; }); topS = topS.slice(0, 5);
+  var badM = wl.filter(function(l) { return (l.sev || 0) >= 5; });
+
+  var sg = E('div', {style:{background:'#fef3e0',border:'1px solid #fac775',borderRadius:'14px',padding:'12px',marginBottom:'12px'}});
+  sg.appendChild(E('p', {style:{fontWeight:'600',color:'#854f0b',fontSize:'14px',marginBottom:'10px'}}, ['This Week at a Glance']));
+  var g3 = E('div', {style:{display:'grid',gridTemplateColumns:'1fr 1fr 1fr',gap:'6px'}});
+  [{l:'Meals',v:wl.filter(function(l){return l.foods;}).length},{l:'Workouts',v:wD},{l:'Avg sleep',v:avgSl?avgSl+'h':'-'},{l:'Avg energy',v:avgE?avgE+'/10':'-'},{l:'Avg stress',v:avgSt?avgSt+'/10':'-'},{l:'Reactions',v:badM.length}].forEach(function(s) {
+    var b = E('div', {style:{background:'#fff',borderRadius:'9px',padding:'8px'}});
+    b.appendChild(E('p', {style:{fontSize:'16px',fontWeight:'700',color:'#2a2520'}}, [String(s.v)]));
+    b.appendChild(E('p', {style:{fontSize:'10px',color:'#9d9088'}}, [s.l]));
+    g3.appendChild(b);
+  });
+  sg.appendChild(g3); w.appendChild(sg);
+
+  if (wD === 0) {
+    var c1 = E('div', {style:{background:'#f0ebfa',border:'1px solid rgba(124,92,191,.3)',borderRadius:'14px',padding:'12px',marginBottom:'8px'}});
+    c1.appendChild(E('p', {style:{fontWeight:'700',color:'#7c5cbf',fontSize:'13px',marginBottom:'3px'}}, ['No workouts this week']));
+    c1.appendChild(E('p', {style:{fontSize:'12px',color:'#2a2520',lineHeight:'1.5'}}, ['Gentle movement helps MCAS. Try a 20-minute walk or yoga session next week.']));
+    w.appendChild(c1);
+  } else {
+    var c2 = E('div', {style:{background:'#eaf5ec',border:'1px solid rgba(58,140,74,.3)',borderRadius:'14px',padding:'12px',marginBottom:'8px'}});
+    c2.appendChild(E('p', {style:{fontWeight:'700',color:'#3a8c4a',fontSize:'13px',marginBottom:'3px'}}, [wD + ' workout day' + (wD > 1 ? 's' : '') + ' this week']));
+    c2.appendChild(E('p', {style:{fontSize:'12px',color:'#2a2520',lineHeight:'1.5'}}, ['Good effort. Aim for 3 to 4 gentle sessions. Walking and yoga are best for MCAS.']));
+    w.appendChild(c2);
+  }
+
+  if (avgSt && parseFloat(avgSt) >= 7) {
+    var c3 = E('div', {style:{background:'#fdeaea',border:'1px solid rgba(201,64,64,.3)',borderRadius:'14px',padding:'12px',marginBottom:'8px'}});
+    c3.appendChild(E('p', {style:{fontWeight:'700',color:'#c94040',fontSize:'13px',marginBottom:'3px'}}, ['High stress this week, average ' + avgSt + '/10']));
+    c3.appendChild(E('p', {style:{fontSize:'12px',color:'#2a2520',lineHeight:'1.5'}}, ['Stress directly triggers mast cells. Consider box breathing or gentle yoga.']));
+    w.appendChild(c3);
+  }
+
+  if (topS.length) {
+    var c4 = E('div', {style:{background:'#fef3e0',border:'1px solid rgba(212,137,10,.3)',borderRadius:'14px',padding:'12px',marginBottom:'8px'}});
+    c4.appendChild(E('p', {style:{fontWeight:'700',color:'#d4890a',fontSize:'13px',marginBottom:'5px'}}, ['Most common symptoms this week']));
+    var pr = E('div', {style:{display:'flex',flexWrap:'wrap',gap:'4px'}});
+    topS.forEach(function(s) { pr.appendChild(pill(s[0] + ' (' + s[1] + 'x)', '#d4890a')); });
+    c4.appendChild(pr); w.appendChild(c4);
+  }
+
+  if (!wl.length) w.appendChild(E('p', {style:{color:'#9d9088',textAlign:'center',padding:'20px 0',fontSize:'13px'}}, ['Log meals, workouts, and sleep this week and your summary will appear here.']));
+
+  var ds = E('div', {cls:'info'});
+  ds.appendChild(E('p', {cls:'it'}, ['Your Doctor Summary This Week']));
+  var lines = ['Meals logged: ' + wl.filter(function(l){return l.foods;}).length + ', High-severity reactions: ' + badM.length, 'Workouts: ' + wD + '/7 days', 'Avg sleep: ' + (avgSl||'-') + 'h, Avg energy: ' + (avgE||'-') + '/10, Avg stress: ' + (avgSt||'-') + '/10', 'Top symptoms: ' + (topS.slice(0,3).map(function(s){return s[0];}).join(', ')||'none logged')];
+  var sp = E('p', {cls:'ib', style:{lineHeight:'1.9'}});
+  lines.forEach(function(l, i) { if (i > 0) sp.appendChild(document.createElement('br')); sp.appendChild(document.createTextNode('- ' + l)); });
+  ds.appendChild(sp); w.appendChild(ds); root.appendChild(w);
+}
+
+function pgCard(root) {
+  var w = E('div');
+  w.appendChild(stitle('🪪', 'My Doctor Card', 'Hand to any new provider. Your complete history in one page.'));
+  var tests = LS.get('tests',[]), meds = LS.get('meds',[]), avoid = LS.get('avoid',[]);
+  var highR = meds.filter(function(m) { return m.sev === 'Critical' || m.sev === 'High Risk'; });
+  var anaphT = avoid.filter(function(i) { return (i.reason||'').toLowerCase().indexOf('anaphylaxis') >= 0; });
+
+  var al = E('div', {cls:'alrt'});
+  al.innerHTML = '<p class="at2">MCAS Patient Alert</p><p class="ab">Suspected <strong>Mast Cell Activation Syndrome</strong>. Lifelong anaphylaxis to bee stings and insect bites. Highly reactive to chemicals, fragrances, certain foods and medications. Condition worsened after prolonged black mold exposure. <strong>Family:</strong> Mother and 2 sisters have MS. Nephew and Son diagnosed MCAS and POTS. MS screening negative, no lesions confirmed.</p>';
+  w.appendChild(al);
+
+  if (anaphT.length) {
+    var c1 = card(); c1.appendChild(E('p', {style:{fontSize:'13px',fontWeight:'600',marginBottom:'7px'}}, ['Anaphylaxis Triggers']));
+    var pr1 = E('div', {style:{display:'flex',flexWrap:'wrap',gap:'4px'}}); anaphT.forEach(function(t) { pr1.appendChild(pill(t.item, '#c94040')); }); c1.appendChild(pr1); w.appendChild(c1);
+  }
+
+  if (highR.length) {
+    var c2 = card(); c2.appendChild(E('p', {style:{fontSize:'13px',fontWeight:'600',marginBottom:'7px'}}, ['High-Risk Medications']));
+    highR.forEach(function(m) {
+      var d = E('div', {style:{marginBottom:'6px',paddingBottom:'6px',borderBottom:'1px solid #e8e0d4'}});
+      d.appendChild(E('p', {style:{fontSize:'12px',fontWeight:'600',color:'#c94040'}}, [m.item]));
+      if (m.reaction) d.appendChild(E('p', {style:{fontSize:'11px',color:'#9d9088',marginTop:'1px'}}, [m.reaction]));
+      c2.appendChild(d);
+    });
+    var dn = E('div', {style:{background:'#fef3e0',borderRadius:'10px',padding:'8px 12px',marginTop:'4px'}});
+    dn.innerHTML = '<p style="font-size:12px;font-weight:600;color:#854f0b">Dental: extremely difficult to numb. Higher doses or alternative agents required.</p>';
+    c2.appendChild(dn); w.appendChild(c2);
+  }
+
+  var pc = card(); pc.appendChild(E('p', {style:{fontSize:'13px',fontWeight:'600',marginBottom:'7px'}}, ['Pre-Procedure Protocol Required']));
+  var pb = E('div', {style:{background:'#e8f0fb',borderRadius:'10px',padding:'10px',fontSize:'12px',color:'#3a6fa8',lineHeight:'1.9'}});
+  pb.innerHTML = 'H1 Antihistamine (cetirizine or diphenhydramine)<br>H2 Blocker (famotidine or Pepcid)<br>Corticosteroid (prednisone)<br>EpiPen available throughout procedure';
+  pc.appendChild(pb); w.appendChild(pc);
+
+  var sc2 = card(); sc2.appendChild(E('p', {style:{fontSize:'13px',fontWeight:'600',marginBottom:'7px'}}, ['Known Sensitivities']));
+  var sl = E('div', {style:{fontSize:'12px',color:'#2a2520',lineHeight:'1.9'}});
+  sl.innerHTML = 'All artificial dyes oral or IV<br>Contrast dyes for imaging, must pre-medicate<br>Perfumes and fragrances<br>Formaldehyde in furniture and fabrics<br>NSAIDs and aspirin<br>Certain antibiotics<br>Certain vaccines, breathing difficulties<br>Morphine and codeine<br>Latex, use nitrile only';
+  sc2.appendChild(sl); w.appendChild(sc2);
+
+  if (tests.length) {
+    var c3 = card(); c3.appendChild(E('p', {style:{fontSize:'13px',fontWeight:'600',marginBottom:'7px'}}, ['Tests Completed']));
+    tests.forEach(function(t) {
+      var d = E('div', {style:{marginBottom:'6px',paddingBottom:'6px',borderBottom:'1px solid #e8e0d4'}});
+      var pr = E('div', {style:{display:'flex',gap:'4px',flexWrap:'wrap',marginBottom:'3px'}}); pr.appendChild(pill(t.type, '#3a6fa8')); pr.appendChild(pill(fmtD(t.date), '#6b6158')); d.appendChild(pr);
+      if (t.result) d.appendChild(E('p', {style:{fontSize:'11px',color:'#2a2520',fontWeight:'500'}}, [t.result]));
+      c3.appendChild(d);
+    });
+    c3.appendChild(E('p', {style:{fontSize:'11px',color:'#9d9088',marginTop:'3px'}}, ['MS screening: negative. No lesions found.']));
+    w.appendChild(c3);
+  }
+
+  var fc = E('div', {cls:'info'}); fc.appendChild(E('p', {cls:'it'}, ['Family History']));
+  var fl = E('div', {style:{fontSize:'12px',color:'#2a2520',lineHeight:'1.9'}});
+  fl.innerHTML = 'Mother: Multiple Sclerosis (MS)<br>Sister Dawn: Multiple Sclerosis<br>Sister Judy: Recently diagnosed MS<br>Nephew: MCAS and POTS<br>Son: MCAS diagnosed<br>Deceased son: Diagnosed with asthma<br>Patient: MS negative, no lesions confirmed';
+  fc.appendChild(fl); w.appendChild(fc); root.appendChild(w);
+}
+
+function pgEnv(root) {
+  var w = E('div');
+  w.appendChild(stitle('✅', 'Home Environment', 'Tap items to check off. A safe home helps your immune system recover.'));
+  var items = LS.get('env', []);
+  var done = items.filter(function(i) { return i.done; }).length;
+  var pct = items.length ? Math.round(done / items.length * 100) : 0;
+
+  var prog = E('div', {cls:'prog'});
+  var pi = E('div');
+  pi.appendChild(E('p', {style:{fontSize:'16px',fontWeight:'600',color:'#2d8c7a'}}, [done + ' of ' + items.length + ' complete (' + pct + '%)']));
+  pi.appendChild(E('p', {style:{fontSize:'11px',color:'#9d9088',marginTop:'2px'}}, ['Tap any item to mark done']));
+  prog.appendChild(pi); w.appendChild(prog);
+
+  var nc = '', ni = '', nn = '';
+  var fc = card();
+  var ci = E('input', {placeholder:'Category'}); ci.oninput = function(e) { nc = e.target.value; };
+  var ii = E('input', {placeholder:'Action item'}); ii.oninput = function(e) { ni = e.target.value; };
+  var nni = E('input', {placeholder:'Notes or brand suggestions'}); nni.oninput = function(e) { nn = e.target.value; };
+  fc.appendChild(fld('', ci)); fc.appendChild(fld('', ii)); fc.appendChild(fld('', nni));
+  fc.appendChild(mkBtn('+ Add Item', 'bt', function() {
+    if (!ni.trim()) return;
+    items = LS.get('env', []); items.push({id:Date.now(),cat:nc||'Other',item:ni,note:nn,done:false}); LS.set('env', items);
+    ci.value=''; ii.value=''; nni.value=''; nc=''; ni=''; nn=''; go('env');
+  }));
+  w.appendChild(fc);
+
+  var cats = [];
+  items.forEach(function(i) { if (cats.indexOf(i.cat) < 0) cats.push(i.cat); });
+  cats.forEach(function(cat) {
+    w.appendChild(E('p', {cls:'cl'}, [cat]));
+    items.filter(function(i) { return i.cat === cat; }).forEach(function(i) {
+      var div = E('div', {style:{display:'flex',alignItems:'flex-start',gap:'10px',background:i.done?'#e8f5f2':'#fff',borderRadius:'12px',padding:'11px',marginBottom:'6px',cursor:'pointer',border:'1.5px solid '+(i.done?'rgba(45,140,122,.35)':'#e8e0d4')}});
+      var box = E('div', {style:{width:'22px',height:'22px',borderRadius:'7px',border:'2px solid '+(i.done?'#2d8c7a':'#e8e0d4'),background:i.done?'#2d8c7a':'transparent',flexShrink:'0',display:'flex',alignItems:'center',justifyContent:'center',marginTop:'1px'}});
+      if (i.done) box.innerHTML = '<svg width="13" height="13" viewBox="0 0 13 13"><path d="M2 6.5l3.5 3.5 5.5-6" stroke="white" stroke-width="2" fill="none" stroke-linecap="round"/></svg>';
+      var info = E('div', {style:{flex:'1'}});
+      info.appendChild(E('p', {style:{fontSize:'13px',fontWeight:i.done?'400':'500',color:i.done?'#9d9088':'#2a2520',textDecoration:i.done?'line-through':'none'}}, [i.item]));
+      if (i.note) info.appendChild(E('p', {style:{fontSize:'11px',color:'#9d9088',marginTop:'2px'}}, [i.note]));
+      var db = E('button', {cls:'del'}, ['x']); db.onclick = function(e) { e.stopPropagation(); items = LS.get('env',[]); LS.set('env', items.filter(function(x) { return x.id !== i.id; })); go('env'); };
+      div.appendChild(box); div.appendChild(info); div.appendChild(db);
+      div.onclick = function() { items = LS.get('env',[]); LS.set('env', items.map(function(x) { return x.id===i.id?{id:x.id,cat:x.cat,item:x.item,note:x.note,done:!x.done}:x; })); go('env'); };
+      w.appendChild(div);
+    });
+  });
+  root.appendChild(w);
+}
+
+function pgMeals(root) {
+  var w = E('div');
+  w.appendChild(stitle('📅', 'Meal Prep', 'MCAS-safe weekly plan and grocery list.'));
+  var sub = 'plan';
+  var tabs = E('div', {cls:'stabs'}); var area = E('div');
+  [{id:'plan',l:'Week Plan'},{id:'grocery',l:'Grocery List'}].forEach(function(t) {
+    var tb = E('button', {cls:'stab' + (t.id === sub ? ' on' : '')}, [t.l]);
+    tb.onclick = function() { sub = t.id; tabs.querySelectorAll('.stab').forEach(function(b, i) { b.className = 'stab' + (['plan','grocery'][i] === t.id ? ' on' : ''); }); renderA(); };
+    tabs.appendChild(tb);
+  });
+  w.appendChild(tabs); w.appendChild(area);
+  var days = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
+  var todayDay = days[new Date().getDay() === 0 ? 6 : new Date().getDay() - 1];
+  var mLabels = {B:'Breakfast',L:'Lunch',D:'Dinner'};
+
+  function renderA() {
+    area.innerHTML = '';
+    if (sub === 'plan') {
+      var warn = E('div', {cls:'warn'});
+      warn.innerHTML = '<p class="wt">MCAS Meal Rules</p><p class="wb">1. Cook fresh, eat immediately or freeze right away<br>2. Never eat refrigerated leftover protein<br>3. Read every label, no dyes, sulfites, MSG<br>4. Introduce one new food at a time, wait 3 days</p>';
+      area.appendChild(warn);
+      var plan = LS.get('meals', []);
+      plan.forEach(function(d, di) {
+        var c = card(d.day === todayDay ? '#f0faf8' : '#fff');
+        if (d.day === todayDay) c.style.borderColor = 'rgba(45,140,122,.4)';
+        var hr = E('div', {style:{display:'flex',alignItems:'center',gap:'6px',marginBottom:'8px'}});
+        hr.appendChild(E('p', {style:{fontSize:'15px',fontWeight:'600',color:d.day===todayDay?'#2d8c7a':'#2a2520'}}, [d.day]));
+        if (d.day === todayDay) hr.appendChild(pill('Today', '#2d8c7a'));
+        c.appendChild(hr);
+        ['B','L','D'].forEach(function(m) {
+          var mw = E('div', {style:{marginBottom:'6px'}});
+          mw.appendChild(E('p', {style:{fontSize:'10px',fontWeight:'700',color:'#9d9088',textTransform:'uppercase',letterSpacing:'.05em',marginBottom:'2px'}}, [mLabels[m]]));
+          var mr = E('div', {style:{display:'flex',alignItems:'flex-start',gap:'6px'}});
+          var mt = E('p', {style:{flex:'1',fontSize:'12px',color:'#6b6158',lineHeight:'1.4'}}, [d[m]]);
+          var eb = E('button', {cls:'btn bsm', style:{flexShrink:'0',background:'#fdf9f4',color:'#9d9088',border:'1px solid #e8e0d4'}}, ['Edit']);
+          (function(meal, idx, mkey) {
+            eb.onclick = function() {
+              var ta = E('textarea', {style:{fontSize:'12px',marginBottom:'5px'}}); ta.value = meal;
+              var sb2 = E('button', {cls:'btn bt bsm'}); sb2.textContent = 'Save';
+              var cb = E('button', {cls:'btn bsm', style:{marginLeft:'4px',background:'transparent',color:'#9d9088',border:'1px solid #e8e0d4'}}); cb.textContent = 'Cancel';
+              var br2 = E('div'); br2.appendChild(sb2); br2.appendChild(cb);
+              mw.innerHTML = ''; mw.appendChild(E('p', {style:{fontSize:'10px',fontWeight:'700',color:'#9d9088',textTransform:'uppercase',letterSpacing:'.05em',marginBottom:'2px'}}, [mLabels[mkey]])); mw.appendChild(ta); mw.appendChild(br2);
+              sb2.onclick = function() { var p = LS.get('meals',[]); p[idx][mkey] = ta.value; LS.set('meals', p); renderA(); };
+              cb.onclick = function() { renderA(); };
+            };
+          })(d[m], di, m);
+          mr.appendChild(mt); mr.appendChild(eb); mw.appendChild(mr); c.appendChild(mw);
+        });
+        area.appendChild(c);
+      });
+    }
+    if (sub === 'grocery') {
+      var gi = '';
+      var ir = E('div', {style:{display:'flex',gap:'6px',marginBottom:'10px'}});
+      var inp = E('input', {placeholder:'Add grocery item...'}); inp.oninput = function(e) { gi = e.target.value; };
+      inp.onkeydown = function(e) { if (e.key === 'Enter' && gi.trim()) addG(); };
+      var ab = E('button', {cls:'btn bt bsm'}); ab.textContent = 'Add'; ab.onclick = function() { addG(); };
+      ir.appendChild(inp); ir.appendChild(ab); area.appendChild(ir);
+      function addG() { if (!gi.trim()) return; var g = LS.get('grocery',[]); g.push({id:Date.now(),item:gi,done:false}); LS.set('grocery', g); inp.value=''; gi=''; renderG(); }
+      var gl = E('div'); area.appendChild(gl);
+      function renderG() {
+        gl.innerHTML = '';
+        var grocery = LS.get('grocery', []);
+        if (!grocery.length) { gl.appendChild(E('p', {style:{color:'#9d9088',textAlign:'center',padding:'20px 0',fontSize:'13px'}}, ['Your grocery list is empty.'])); return; }
+        grocery.filter(function(g) { return !g.done; }).forEach(function(g) {
+          var row = E('div', {style:{display:'flex',alignItems:'center',gap:'10px',background:'#fff',borderRadius:'12px',padding:'11px',marginBottom:'6px',cursor:'pointer',border:'1px solid #e8e0d4'}});
+          var box = E('div', {style:{width:'20px',height:'20px',borderRadius:'6px',border:'1.5px solid #e8e0d4',flexShrink:'0'}});
+          var db = E('button', {cls:'del'}, ['x']); db.onclick = function(e) { e.stopPropagation(); LS.set('grocery', LS.get('grocery',[]).filter(function(x) { return x.id !== g.id; })); renderG(); };
+          row.appendChild(box); row.appendChild(E('p', {style:{flex:'1',fontSize:'13px'}}, [g.item])); row.appendChild(db);
+          row.onclick = function() { LS.set('grocery', LS.get('grocery',[]).map(function(x) { return x.id===g.id?{id:x.id,item:x.item,done:true}:x; })); renderG(); };
+          gl.appendChild(row);
+        });
+        var dones = grocery.filter(function(g) { return g.done; });
+        if (dones.length) {
+          gl.appendChild(E('p', {style:{fontSize:'11px',fontWeight:'700',color:'#9d9088',textTransform:'uppercase',letterSpacing:'.05em',margin:'10px 0 6px'}}, ['Got it']));
+          dones.forEach(function(g) {
+            var row = E('div', {style:{display:'flex',alignItems:'center',gap:'10px',background:'#e8f5f2',borderRadius:'12px',padding:'9px',marginBottom:'5px',cursor:'pointer',border:'1px solid rgba(45,140,122,.2)'}});
+            var box = E('div', {style:{width:'20px',height:'20px',borderRadius:'6px',border:'1.5px solid #2d8c7a',background:'#2d8c7a',flexShrink:'0',display:'flex',alignItems:'center',justifyContent:'center'}});
+            box.innerHTML = '<svg width="11" height="11" viewBox="0 0 11 11"><path d="M1.5 5.5l3 3 5-6" stroke="white" stroke-width="2" fill="none" stroke-linecap="round"/></svg>';
+            var db = E('button', {cls:'del'}, ['x']); db.onclick = function(e) { e.stopPropagation(); LS.set('grocery', LS.get('grocery',[]).filter(function(x) { return x.id !== g.id; })); renderG(); };
+            row.appendChild(box); row.appendChild(E('p', {style:{flex:'1',fontSize:'12px',color:'#9d9088',textDecoration:'line-through'}}, [g.item])); row.appendChild(db);
+            row.onclick = function() { LS.set('grocery', LS.get('grocery',[]).map(function(x) { return x.id===g.id?{id:x.id,item:x.item,done:false}:x; })); renderG(); };
+            gl.appendChild(row);
+          });
+        }
+      }
+      renderG();
+    }
+  }
+  renderA(); root.appendChild(w);
+}
+
+
+function exportData() {
+  var data = {
+    cl: LS.get('cl', []),
+    logs: LS.get('logs', []),
+    avoid: LS.get('avoid', []),
+    safe: LS.get('safe', []),
+    meds: LS.get('meds', []),
+    supps: LS.get('supps', []),
+    tests: LS.get('tests', []),
+    doctors: LS.get('doctors', []),
+    docRecs: LS.get('docRecs', []),
+    env: LS.get('env', []),
+    meals: LS.get('meals', []),
+    grocery: LS.get('grocery', []),
+    exported: new Date().toISOString()
+  };
+  var json = JSON.stringify(data, null, 2);
+  var blob = new Blob([json], {type: 'application/json'});
+  var url = URL.createObjectURL(blob);
+  var a = document.createElement('a');
+  a.href = url;
+  a.download = 'MCAS-Backup-' + new Date().toISOString().split('T')[0] + '.json';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
+function importData(file) {
+  var reader = new FileReader();
+  reader.onload = function(e) {
+    try {
+      var data = JSON.parse(e.target.result);
+      var keys = ['cl','logs','avoid','safe','meds','supps','tests','doctors','docRecs','env','meals','grocery'];
+      keys.forEach(function(k) {
+        if (data[k]) LS.set(k, data[k]);
+      });
+      alert('Data imported successfully! Your app has been updated.');
+      go('home');
+    } catch(err) {
+      alert('Import failed - please make sure you selected a valid MCAS backup file.');
+    }
+  };
+  reader.readAsText(file);
+}
+
+function showBackupScreen(root) {
+  var overlay = E('div', {cls:'modal'});
+  var box = E('div', {cls:'mbox'});
+  box.appendChild(E('p', {style:{fontSize:'17px',fontWeight:'600',marginBottom:'6px'}}, ['Backup and Restore']));
+  box.appendChild(E('p', {style:{fontSize:'12px',color:'#9d9088',marginBottom:'16px',lineHeight:'1.5'}}, ['Export saves all your data to a file you can keep safe or import on another device like your iPad.']));
+
+  // Export section
+  var es = E('div', {style:{background:'#e8f5f2',borderRadius:'12px',padding:'13px',marginBottom:'12px',border:'1px solid rgba(45,140,122,.3)'}});
+  es.appendChild(E('p', {style:{fontWeight:'600',color:'#0f6e56',fontSize:'13px',marginBottom:'4px'}}, ['Export Your Data']));
+  es.appendChild(E('p', {style:{fontSize:'12px',color:'#6b6158',marginBottom:'10px',lineHeight:'1.5'}}, ['Downloads a backup file with ALL your logs, supplements, doctors, tests, food lists and checklist items.']));
+  var expBtn = mkBtn('Download Backup File', 'bt', function() {
+    exportData();
+    expBtn.textContent = 'Downloading...';
+    setTimeout(function() { expBtn.textContent = 'Download Backup File'; }, 2000);
+  });
+  es.appendChild(expBtn);
+  box.appendChild(es);
+
+  // Import section
+  var is2 = E('div', {style:{background:'#e8f0fb',borderRadius:'12px',padding:'13px',marginBottom:'12px',border:'1px solid rgba(58,111,168,.3)'}});
+  is2.appendChild(E('p', {style:{fontWeight:'600',color:'#0c447c',fontSize:'13px',marginBottom:'4px'}}, ['Import Data from Backup']));
+  is2.appendChild(E('p', {style:{fontSize:'12px',color:'#6b6158',marginBottom:'10px',lineHeight:'1.5'}}, ['Select a backup file you exported before. This will replace all current data on this device with the backup.']));
+  var fileInp = E('input', {type:'file', accept:'.json', style:{display:'none'}});
+  fileInp.onchange = function(e) {
+    if (e.target.files && e.target.files[0]) {
+      importData(e.target.files[0]);
+      document.body.removeChild(overlay);
+    }
+  };
+  var impBtn = mkBtn('Select Backup File to Import', 'bb', function() { fileInp.click(); });
+  is2.appendChild(impBtn);
+  is2.appendChild(fileInp);
+  box.appendChild(is2);
+
+  // How to sync between devices
+  var hw = E('div', {style:{background:'#fef3e0',borderRadius:'12px',padding:'13px',marginBottom:'12px',border:'1px solid rgba(212,137,10,.3)'}});
+  hw.appendChild(E('p', {style:{fontWeight:'600',color:'#854f0b',fontSize:'13px',marginBottom:'6px'}}, ['How to Sync iPhone to iPad']));
+  var steps = ['1. On your iPhone tap Export and download the backup file','2. Email or AirDrop that file to your iPad','3. On your iPad open the app and tap Backup in the top right','4. Tap Import and select the file','5. Your iPad now has all your iPhone data'];
+  steps.forEach(function(s) {
+    hw.appendChild(E('p', {style:{fontSize:'12px',color:'#6b6158',marginBottom:'3px',lineHeight:'1.5'}}, [s]));
+  });
+  box.appendChild(hw);
+
+  var cl = E('button', {style:{width:'100%',background:'transparent',color:'#9d9088',border:'2px solid #e8e0d4',borderRadius:'12px',padding:'10px',fontSize:'14px',fontWeight:'600',cursor:'pointer',marginTop:'4px'}});
+  cl.textContent = 'Close';
+  cl.onclick = function() { document.body.removeChild(overlay); };
+  box.appendChild(cl);
+  overlay.appendChild(box);
+  overlay.onclick = function(e) { if (e.target === overlay) document.body.removeChild(overlay); };
+  document.body.appendChild(overlay);
+}
+
+
+function pgProducts(root) {
+  var w = E('div');
+  w.appendChild(stitle('🛒', 'My Products', 'Track what you ordered, tried, and how it worked for MCAS.'));
+
+  var sub = 'personal';
+  var tabs = E('div', {cls:'stabs'});
+  var area = E('div');
+  [{id:'personal',l:'Personal Care'},{id:'supps2',l:'Supplements'},{id:'cleaning',l:'Cleaning'},{id:'routine',l:'Routine'}].forEach(function(t) {
+    var tb = E('button', {cls:'stab' + (t.id === sub ? ' on' : '')}, [t.l]);
+    tb.onclick = function() {
+      sub = t.id;
+      tabs.querySelectorAll('.stab').forEach(function(b, i) {
+        b.className = 'stab' + (['personal','supps2','cleaning','routine'][i] === t.id ? ' on' : '');
+      });
+      renderArea();
+    };
+    tabs.appendChild(tb);
+  });
+  w.appendChild(tabs);
+  w.appendChild(area);
+
+  var statusColors = {
+    'Have it':'#3a8c4a',
+    'Ordered':'#3a6fa8',
+    'To Order':'#d4890a',
+    'Works Great':'#3a8c4a',
+    'Works OK':'#2d8c7a',
+    'Reaction':'#c94040',
+    'Not for me':'#9d9088'
+  };
+
+  function renderArea() {
+    area.innerHTML = '';
+    var prodKey = sub === 'personal' ? 'myproducts' : 'supplyproducts';
+    var prodCatFilter = sub === 'cleaning' ? ['All-Purpose Cleaner','Stone Floors','Wood Floors','Glass and Windows','Laundry','Dishes','Disinfecting','Bathroom','Wood Care'] : (sub === 'supps2' ? ['Mast Cell Stabilizers','DAO Histamine Support','Essential Vitamins','Omega-3','MCAS-Safe Probiotics'] : null);
+
+    if (sub === 'personal' || sub === 'supps2' || sub === 'cleaning') {
+      // Add product form
+      var sf = false;
+      var nf = {cat:'',name:'',brand:'',where:'',price:'',notes:'',reorderWeeks:8};
+      var fc = card(); fc.style.display = 'none';
+      var ci = E('input', {placeholder:'Category e.g. Hair Care'}); ci.oninput = function(e) { nf.cat = e.target.value; };
+      var ni = E('input', {placeholder:'Product name'}); ni.oninput = function(e) { nf.name = e.target.value; };
+      var bi = E('input', {placeholder:'Brand'}); bi.oninput = function(e) { nf.brand = e.target.value; };
+      var wi = E('input', {placeholder:'Where to buy e.g. Amazon'}); wi.oninput = function(e) { nf.where = e.target.value; };
+      var pi = E('input', {placeholder:'Price e.g. $14'}); pi.oninput = function(e) { nf.price = e.target.value; };
+      var noi = E('textarea', {placeholder:'Notes...'}); noi.style.minHeight = '50px'; noi.oninput = function(e) { nf.notes = e.target.value; };
+      fc.appendChild(fld('Category', ci)); fc.appendChild(fld('Product Name', ni));
+      fc.appendChild(fld('Brand', bi)); fc.appendChild(fld('Where to Buy', wi));
+      fc.appendChild(fld('Price', pi)); fc.appendChild(fld('Notes', noi));
+      fc.appendChild(mkBtn('+ Add Product', 'bt', function() {
+        if (!nf.name.trim()) return;
+        var allProds = LS.get(prodKey, []);
+        var prods = prodCatFilter ? allProds.filter(function(p) { return prodCatFilter.indexOf(p.cat) >= 0; }) : allProds;
+        prods.push({id:Date.now(),cat:nf.cat||'Other',name:nf.name,brand:nf.brand,where:nf.where,price:nf.price,status:'To Order',tried:false,rating:0,reaction:'',notes:nf.notes,reorderWeeks:nf.reorderWeeks,reorderAlert:false,orderedDate:''});
+        LS.set(prodKey, prods);
+        ci.value=''; ni.value=''; bi.value=''; wi.value=''; pi.value=''; noi.value='';
+        nf = {cat:'',name:'',brand:'',where:'',price:'',notes:'',reorderWeeks:8};
+        renderArea();
+      }));
+      var ab = mkBtn('+ Add New Product', 'bt', function() { sf = !sf; fc.style.display = sf ? 'block' : 'none'; ab.textContent = sf ? 'Cancel' : '+ Add New Product'; });
+      ab.style.marginBottom = '10px';
+      area.appendChild(ab); area.appendChild(fc);
+
+      // Filter buttons
+      var filterSub = 'all';
+      var frow = E('div', {style:{display:'flex',gap:'5px',flexWrap:'wrap',marginBottom:'12px'}});
+      [{id:'all',l:'All'},{id:'ordered',l:'Ordered'},{id:'toorder',l:'To Order'},{id:'tried',l:'Tried'},{id:'works',l:'Works'}].forEach(function(f) {
+        var fb = E('button', {style:{borderRadius:'20px',padding:'4px 11px',fontSize:'11px',fontWeight:'600',cursor:'pointer',border:'1.5px solid #e8e0d4',background:f.id===filterSub?'#2d8c7a':'transparent',color:f.id===filterSub?'#fff':'#9d9088'}}, [f.l]);
+        fb.onclick = function() {
+          filterSub = f.id;
+          frow.querySelectorAll('button').forEach(function(b, i) {
+            var ids = ['all','ordered','toorder','tried','works'];
+            b.style.background = ids[i] === f.id ? '#2d8c7a' : 'transparent';
+            b.style.color = ids[i] === f.id ? '#fff' : '#9d9088';
+          });
+          renderList();
+        };
+        frow.appendChild(fb);
+      });
+      area.appendChild(frow);
+
+      var listArea = E('div');
+      area.appendChild(listArea);
+
+      function renderList() {
+        listArea.innerHTML = '';
+        var prods = LS.get('myproducts', []);
+        var filtered = prods.filter(function(p) {
+          if (filterSub === 'all') return true;
+          if (filterSub === 'ordered') return p.status === 'Ordered';
+          if (filterSub === 'toorder') return p.status === 'To Order';
+          if (filterSub === 'tried') return p.tried;
+          if (filterSub === 'works') return p.status === 'Works Great' || p.status === 'Works OK';
+          return true;
+        });
+
+        var cats = [];
+        filtered.forEach(function(p) { if (cats.indexOf(p.cat) < 0) cats.push(p.cat); });
+
+        cats.forEach(function(cat) {
+          listArea.appendChild(E('p', {style:{fontSize:'11px',fontWeight:'700',color:'#2d8c7a',textTransform:'uppercase',letterSpacing:'.05em',marginBottom:'6px',marginTop:'10px'}}, [cat]));
+          filtered.filter(function(p) { return p.cat === cat; }).forEach(function(p) {
+            var c = card();
+            var sc = statusColors[p.status] || '#9d9088';
+
+            // Top row - name and delete
+            var tr = E('div', {style:{display:'flex',justifyContent:'space-between',alignItems:'flex-start',marginBottom:'6px'}});
+            var info = E('div', {style:{flex:'1'}});
+            info.appendChild(E('p', {style:{fontSize:'13px',fontWeight:'600',color:'#2a2520',marginBottom:'4px'}}, [p.name]));
+            var pr = E('div', {style:{display:'flex',gap:'4px',flexWrap:'wrap',marginBottom:'4px'}});
+            pr.appendChild(pill(p.status, sc));
+            if (p.price) pr.appendChild(pill(p.price, '#6b6158'));
+            if (p.tried && p.rating > 0) pr.appendChild(pill(p.rating + '/10', p.rating >= 7 ? '#3a8c4a' : p.rating >= 4 ? '#d4890a' : '#c94040'));
+            info.appendChild(pr);
+            if (p.where) info.appendChild(E('p', {style:{fontSize:'11px',color:'#9d9088',marginBottom:'2px'}}, ['Buy: ' + p.where]));
+            if (p.notes) info.appendChild(E('p', {style:{fontSize:'11px',color:'#6b6158',lineHeight:'1.4',marginBottom:'4px'}}, [p.notes]));
+            var db = E('button', {cls:'del', style:{fontSize:'18px',marginLeft:'6px',flexShrink:'0'}}, ['x']);
+            db.onclick = function() { LS.set(prodKey, LS.get(prodKey,[]).filter(function(x) { return x.id !== p.id; })); renderList(); };
+            tr.appendChild(info); tr.appendChild(db); c.appendChild(tr);
+
+            // Action buttons based on status
+            var btnRow = E('div', {style:{display:'flex',gap:'5px',flexWrap:'wrap'}});
+
+            if (p.status === 'To Order') {
+              var ob = E('button', {cls:'btn bt bsm', style:{flex:'1'}}, ['Mark Ordered']);
+              ob.onclick = function() {
+                LS.set(prodKey, LS.get(prodKey,[]).map(function(x) {
+                  return x.id===p.id ? {id:x.id,cat:x.cat,name:x.name,brand:x.brand,where:x.where,price:x.price,status:'Ordered',tried:x.tried,rating:x.rating,reaction:x.reaction,notes:x.notes,reorderWeeks:x.reorderWeeks,reorderAlert:x.reorderAlert,orderedDate:today()} : x;
+                }));
+                renderList();
+              };
+              btnRow.appendChild(ob);
+            }
+
+            if (p.status === 'Ordered' || p.status === 'Have it') {
+              var tb2 = E('button', {cls:'btn bt bsm', style:{flex:'1'}}, ['I Tried It']);
+              tb2.onclick = function() { showTryModal(p, renderList); };
+              btnRow.appendChild(tb2);
+            }
+
+            if (p.tried && (p.status === 'Works Great' || p.status === 'Works OK' || p.status === 'Reaction' || p.status === 'Not for me')) {
+              var nb2 = E('button', {cls:'btn bsm', style:{flex:'1',background:'#fef3e0',color:'#854f0b',border:'1px solid rgba(212,137,10,.3)'}}, ['Update Notes']);
+              nb2.onclick = function() { showTryModal(p, renderList); };
+              btnRow.appendChild(nb2);
+            }
+
+            if (p.status === 'Reaction' || p.status === 'Not for me') {
+              var altb = E('button', {cls:'btn bsm', style:{flex:'1',background:'#fdeaea',color:'#c94040',border:'1px solid rgba(201,64,64,.3)'}}, ['Ask for Alternative']);
+              altb.onclick = function() {
+                var msg = 'I tried ' + p.name + ' for ' + p.cat + ' and it did not work for me. My reaction was: ' + (p.reaction||'not tolerated') + '. Rating: ' + p.rating + '/10. Can you suggest an alternative that is safe for MCAS?';
+                var overlay = E('div', {cls:'modal'});
+                var box = E('div', {cls:'mbox'});
+                box.appendChild(E('p', {style:{fontSize:'15px',fontWeight:'600',marginBottom:'8px'}}, ['Ask for Alternative']));
+                box.appendChild(E('p', {style:{fontSize:'12px',color:'#6b6158',marginBottom:'10px',lineHeight:'1.5'}}, ['Copy this message and paste it to Claude to get an alternative recommendation:']));
+                var ta = E('textarea', {style:{fontSize:'12px',height:'120px',marginBottom:'10px'}}); ta.readOnly = true; ta.value = msg; box.appendChild(ta);
+                var cb = mkBtn('Copy Message', 'bt', function() {
+                  if (navigator && navigator.clipboard) navigator.clipboard.writeText(msg);
+                  else { ta.select(); document.execCommand('copy'); }
+                  cb.textContent = 'Copied!'; setTimeout(function() { cb.textContent = 'Copy Message'; }, 2000);
+                });
+                box.appendChild(cb);
+                var cl = E('button', {style:{width:'100%',background:'transparent',color:'#9d9088',border:'2px solid #e8e0d4',borderRadius:'12px',padding:'10px',fontSize:'14px',fontWeight:'600',cursor:'pointer',marginTop:'6px'}}); cl.textContent = 'Close'; cl.onclick = function() { document.body.removeChild(overlay); };
+                box.appendChild(cl); overlay.appendChild(box); overlay.onclick = function(e) { if (e.target===overlay) document.body.removeChild(overlay); }; document.body.appendChild(overlay);
+              };
+              btnRow.appendChild(altb);
+            }
+
+            // Reorder reminder
+            if (p.reorderWeeks > 0 && p.tried) {
+              var rb2 = E('button', {cls:'btn bsm', style:{background:'#e8f0fb',color:'#3a6fa8',border:'1px solid rgba(58,111,168,.25)'}}, ['Reorder Reminder']);
+              rb2.onclick = function() {
+                var prods2 = LS.get('myproducts',[]);
+                LS.set(prodKey, prods2.map(function(x) { return x.id===p.id ? {id:x.id,cat:x.cat,name:x.name,brand:x.brand,where:x.where,price:x.price,status:x.status,tried:x.tried,rating:x.rating,reaction:x.reaction,notes:x.notes,reorderWeeks:x.reorderWeeks,reorderAlert:!x.reorderAlert,orderedDate:x.orderedDate} : x; }));
+                renderList();
+              };
+              btnRow.appendChild(rb2);
+              if (p.reorderAlert) {
+                var ra = E('div', {style:{background:'#e8f0fb',borderRadius:'8px',padding:'5px 9px',marginTop:'5px',fontSize:'11px',color:'#3a6fa8',fontWeight:'600'}}, ['Reorder reminder ON — buy from: ' + p.where]);
+                c.appendChild(ra);
+              }
+            }
+
+            if (btnRow.children.length) c.appendChild(btnRow);
+            listArea.appendChild(c);
+          });
+        });
+
+        if (!filtered.length) {
+          listArea.appendChild(E('p', {style:{color:'#9d9088',textAlign:'center',padding:'20px 0',fontSize:'13px'}}, ['No products found in this category.']));
+        }
+      }
+      renderList();
+
+    } else {
+      // SKINCARE ROUTINE TAB
+      var routineWarn = E('div', {cls:'warn'});
+      routineWarn.innerHTML = '<p class="wt">Golden Rule of Skincare Layering</p><p class="wb">Lightest texture to heaviest. Thinnest goes first, thickest goes last. Each layer needs to absorb before the next one goes on. The ORDER matters far more than the wait time.</p>';
+      area.appendChild(routineWarn);
+
+      // Morning routine
+      var mc = card('#f0faf8'); mc.style.borderColor = 'rgba(45,140,122,.3)';
+      mc.appendChild(E('p', {style:{fontSize:'15px',fontWeight:'600',color:'#2d8c7a',marginBottom:'4px'}}, ['Morning Routine — 5 Steps']));
+      mc.appendChild(E('p', {style:{fontSize:'11px',color:'#9d9088',marginBottom:'12px'}}, ['Goal: Hydrate, treat, and PROTECT. Always end with SPF.']));
+      var mSteps = [
+        {step:'Step 1 — Cleanse',time:'Wait 30 sec',detail:'Wash with lukewarm water and Vanicream Gentle Wash. Pat dry gently. Lukewarm only — hot water triggers histamine release from skin mast cells.'},
+        {step:'Step 2 — Herbivore Bakuchiol Serum',time:'Wait 60 sec',detail:'2-3 drops pressed gently into face, neck and decollete. Do not rub. Plant retinol alternative plus hydration.'},
+        {step:'Step 3 — The Ordinary Argireline Solution 10%',time:'Wait 30-60 sec',detail:'2-3 drops pressed gently over face and neck. Firming peptide for expression lines and collagen support. Absorbs almost instantly.'},
+        {step:'Step 4 — Vanicream Daily Facial Moisturizer',time:'Wait 1-2 min',detail:'Pea-sized amount over face and neck. Locks in Steps 2 and 3.'},
+        {step:'Step 5 — Blue Lizard SPF 50+ (ALWAYS LAST)',time:'Final step',detail:'Apply generously to face, neck, and backs of hands. SPF must be absolute last step every morning. Apply to neck and hands too — these age fastest.'}
+      ];
+      mSteps.forEach(function(s, i) {
+        var row = E('div', {style:{display:'flex',gap:'10px',marginBottom:'10px',paddingBottom:'10px',borderBottom: i < mSteps.length-1 ? '1px solid #e8e0d4' : 'none'}});
+        var num = E('div', {style:{width:'26px',height:'26px',borderRadius:'50%',background:'#2d8c7a',color:'#fff',display:'flex',alignItems:'center',justifyContent:'center',fontSize:'12px',fontWeight:'700',flexShrink:'0',marginTop:'1px'}}, [String(i+1)]);
+        var inf = E('div', {style:{flex:'1'}});
+        inf.appendChild(E('p', {style:{fontSize:'13px',fontWeight:'600',color:'#2a2520',marginBottom:'2px'}}, [s.step]));
+        inf.appendChild(pill(s.time, '#2d8c7a'));
+        inf.appendChild(E('p', {style:{fontSize:'11px',color:'#6b6158',lineHeight:'1.5',marginTop:'4px'}}, [s.detail]));
+        row.appendChild(num); row.appendChild(inf); mc.appendChild(row);
+      });
+      area.appendChild(mc);
+
+      // Evening routine
+      var ec = card('#fdf9f4'); ec.style.borderColor = 'rgba(30,58,95,.2)';
+      ec.appendChild(E('p', {style:{fontSize:'15px',fontWeight:'600',color:'#1e3a5f',marginBottom:'4px'}}, ['Evening Routine — 5 Steps']));
+      ec.appendChild(E('p', {style:{fontSize:'11px',color:'#9d9088',marginBottom:'12px'}}, ['Goal: Repair, renew, and nourish overnight. No SPF at night.']));
+      var eSteps = [
+        {step:'Step 1 — Double Cleanse',time:'Take your time',detail:'First: 2-3 drops pure jojoba oil on DRY face, massage 60 seconds, rinse. This dissolves SPF. Second: Vanicream Gentle Wash to remove residue. Pat dry.'},
+        {step:'Step 2 — The Ordinary Buffet + Copper Peptides',time:'Wait 60 sec',detail:'3-4 drops pressed gently over face and neck. Collagen support layer. Do NOT mix with Vitamin C on the same night.'},
+        {step:'Step 3 — Bakuchiol Botanicals Cream',time:'Wait 1-2 min',detail:'Pea-sized amount smoothed over face and neck with gentle upward strokes. NEW: start 3 nights per week for first 2 weeks Mon/Wed/Fri, then build up.'},
+        {step:'Step 4 — Annmarie Eye Cream or Rosehip Oil (eye area only)',time:'Wait 1 min',detail:'Ring finger only — lightest pressure. Annmarie Eye Cream: tap around orbital bone never on eyelid. Or 1 drop rosehip oil tapped gently around eye area.'},
+        {step:'Step 5 — Trilogy Rosehip Oil (ALWAYS LAST)',time:'Final step',detail:'2-3 drops warmed between palms, pressed over face, neck and decollete. Oil MUST be last — creates a seal locking in everything underneath. Natural vitamin A overnight repair.'}
+      ];
+      eSteps.forEach(function(s, i) {
+        var row = E('div', {style:{display:'flex',gap:'10px',marginBottom:'10px',paddingBottom:'10px',borderBottom: i < eSteps.length-1 ? '1px solid #e8e0d4' : 'none'}});
+        var num = E('div', {style:{width:'26px',height:'26px',borderRadius:'50%',background:'#1e3a5f',color:'#fff',display:'flex',alignItems:'center',justifyContent:'center',fontSize:'12px',fontWeight:'700',flexShrink:'0',marginTop:'1px'}}, [String(i+1)]);
+        var inf = E('div', {style:{flex:'1'}});
+        inf.appendChild(E('p', {style:{fontSize:'13px',fontWeight:'600',color:'#2a2520',marginBottom:'2px'}}, [s.step]));
+        inf.appendChild(pill(s.time, '#1e3a5f'));
+        inf.appendChild(E('p', {style:{fontSize:'11px',color:'#6b6158',lineHeight:'1.5',marginTop:'4px'}}, [s.detail]));
+        row.appendChild(num); row.appendChild(inf); ec.appendChild(row);
+      });
+      area.appendChild(ec);
+
+      // Build up schedule
+      var bc = E('div', {cls:'warn'});
+      bc.innerHTML = '<p class="wt">First 6 Weeks Build-Up Schedule</p><p class="wb">Weeks 1-2: Bakuchiol Botanicals Cream 3 nights per week only (Mon/Wed/Fri). All other products daily.<br>Weeks 3-4: Increase bakuchiol to 5 nights if no reaction.<br>Week 5+: Use all products nightly if tolerating well.<br>FLARE DAY RULE: Strip back to Vanicream moisturizer and rosehip oil only. Resume full routine when calm.</p>';
+      area.appendChild(bc);
+    }
+  }
+
+  renderArea();
+  root.appendChild(w);
+}
+
+function showTryModal(p, onSave) {
+  var rating = p.rating || 0;
+  var reaction = p.reaction || '';
+  var notes = p.notes || '';
+  var newStatus = p.status;
+
+  var overlay = E('div', {cls:'modal'});
+  var box = E('div', {cls:'mbox'});
+  box.appendChild(E('p', {style:{fontSize:'15px',fontWeight:'600',marginBottom:'4px'}}, ['How did it work?']));
+  box.appendChild(E('p', {style:{fontSize:'12px',color:'#9d9088',marginBottom:'12px'}}, [p.name]));
+
+  // Status selector
+  box.appendChild(E('label', {cls:'fl'}, ['How did it work for you?']));
+  var statusRow = E('div', {style:{display:'flex',gap:'5px',flexWrap:'wrap',marginBottom:'12px'}});
+  ['Works Great','Works OK','Reaction','Not for me'].forEach(function(s) {
+    var sb = E('button', {style:{borderRadius:'20px',padding:'5px 11px',fontSize:'11px',fontWeight:'600',cursor:'pointer',border:'1.5px solid #e8e0d4',background:s===newStatus?'#2d8c7a':'transparent',color:s===newStatus?'#fff':'#9d9088'}}, [s]);
+    sb.onclick = function() {
+      newStatus = s;
+      statusRow.querySelectorAll('button').forEach(function(b) { b.style.background = 'transparent'; b.style.color = '#9d9088'; });
+      sb.style.background = '#2d8c7a'; sb.style.color = '#fff';
+    };
+    statusRow.appendChild(sb);
+  });
+  box.appendChild(statusRow);
+
+  // Rating
+  box.appendChild(E('label', {cls:'fl'}, ['Rate it 1-10 (1=terrible, 10=love it)']));
+  box.appendChild(rbar(rating, function(v) { rating = v; }, 'tl'));
+
+  // Reaction notes
+  var ri = E('input', {placeholder:'Any reaction or side effects? Leave blank if none'}); ri.value = reaction; ri.oninput = function(e) { reaction = e.target.value; }; box.appendChild(fld('Reaction', ri));
+  var ni = E('textarea', {placeholder:'How does it make you feel? Skin feel? Smell ok? Would you reorder?'}); ni.style.minHeight = '70px'; ni.value = notes; ni.oninput = function(e) { notes = e.target.value; }; box.appendChild(fld('Your Notes', ni));
+
+  var sb2 = mkBtn('Save', 'bt', function() {
+    var prods = LS.get('myproducts',[]);
+    var tryKey = p.id >= 200 ? 'supplyproducts' : (p.id >= 100 ? 'supplyproducts' : 'myproducts');
+    LS.set(tryKey, LS.get(tryKey,[]).map(function(x) {
+      if (x.id !== p.id) return x;
+      return {id:x.id,cat:x.cat,name:x.name,brand:x.brand,where:x.where,price:x.price,status:newStatus,tried:true,rating:rating,reaction:reaction,notes:notes,reorderWeeks:x.reorderWeeks,reorderAlert:x.reorderAlert,orderedDate:x.orderedDate};
+    }));
+    document.body.removeChild(overlay);
+    onSave();
+  });
+  sb2.style.marginBottom = '6px'; box.appendChild(sb2);
+  var cl = E('button', {style:{width:'100%',background:'transparent',color:'#9d9088',border:'2px solid #e8e0d4',borderRadius:'12px',padding:'10px',fontSize:'14px',fontWeight:'600',cursor:'pointer'}}); cl.textContent = 'Cancel'; cl.onclick = function() { document.body.removeChild(overlay); };
+  box.appendChild(cl); overlay.appendChild(box); overlay.onclick = function(e) { if (e.target===overlay) document.body.removeChild(overlay); }; document.body.appendChild(overlay);
+}
+
+buildNav();
+go('home');
+</script>
+</body>
+</html>
